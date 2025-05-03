@@ -1,0 +1,94 @@
+body {
+    font-family: 'Courier New', monospace;
+    background-color: #fdfdfd;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1.game-title {
+    margin: 20px;
+    font-size: 2em;
+    letter-spacing: 2px;
+  }
+
+  .selection-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .player-info {
+    width: 20%;
+  }
+
+  .player-portrait {
+    width: 100%;
+    border: 2px solid black;
+  }
+
+  .player-name {
+    font-size: 2em;
+    margin-top: 10px;
+  }
+
+  .player-style {
+    font-size: 1em;
+    color: #666;
+  }
+
+  .grid-case {
+    width: 60%;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 10px;
+    justify-items: center;
+  }
+
+  .character-cell {
+    width: 100px;
+    height: 100px;
+    border: 2px dashed #aaa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    font-size: 0.8em;
+  }
+
+  .character-cell img {
+    max-width: 80px;
+    max-height: 80px;
+  }
+
+  .character-name {
+    margin-top: 4px;
+  }
+
+  .p1-cursor {
+    outline: 3px solid blue;
+  }
+
+  .p2-cursor {
+    outline: 3px solid red;
+  }
+
+  .p1-selected {
+    background-color: rgba(0, 0, 255, 0.1);
+  }
+
+  .p2-selected {
+    background-color: rgba(255, 0, 0, 0.1);
+  }
+
+  #start-button {
+    margin: 30px auto;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    display: none;
+  }

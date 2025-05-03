@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Animation d'attaque</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-color: #f0f0f0;
+        }
+
+        canvas {
+            border: 2px solid black;
+            background-color: white;
+        }
+
+        .instructions {
+            margin-top: 20px;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+
+        .key {
+            display: inline-block;
+            background-color: #ddd;
+            border: 1px solid #999;
+            border-radius: 4px;
+            padding: 2px 8px;
+            margin: 0 3px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="instructions">
+        <h2>Animation d'attaque</h2>
+        <p>Appuyez sur les touches <span class="key">1</span>, <span class="key">2</span> ou <span class="key">3</span>
+            pour déclencher différentes animations d'attaque.</p>
+        <ul style="text-align: left;">
+            <li><span class="key">1</span> : Animation d'attaque avec 3 sprites (première ligne)</li>
+            <li><span class="key">2</span> : Animation d'attaque avec 4 sprites (deuxième ligne)</li>
+            <li><span class="key">3</span> : Animation d'attaque avec 5 sprites (troisième ligne)</li>
+        </ul>
+    </div>
+
+    <script>
+        // Configuration du jeu
+        const config = {
+            width: 400,
+            height: 400,
+            tilesetWidth: 2500,
+            tilesetHeight: 1080,
+            columns: 6,
+            rows: 3,
+            animations: {
+                attack1: { frameCount: 3, row: 0, frameDuration: 50 },
+                attack2: { frameCount: 4, row: 1, frameDuration: 70 },
+                attack3: { frameCount: 5, row: 2, frameDuration: 100 }
+            }
+        };
+
+        let canvas, ctx;
+        let tileset;
+        let currentAnimation = null;
+        let currentFrame = 0;
+        let animationTimer = null;
+        let spriteWidth = config.tilesetWidth / config.columns;
+        let spriteHeight = Math.floor(config.tilesetHeight / config.rows); // 322
+
+        window.onload = function () {
+            canvas = document.createElement('canvas');
+            canvas.width = config.width;
+            canvas.height = config.height;
+            ctx = canvas.getContext('2d');
+            document.body.appendChild(canvas);
+
+            tileset = new Image();
+            tileset.src = 'TilesetAireAttacks.png';
+
+            tileset.onload = () => {
+                drawIdle();
+            };
+        };
+
+        function handleKeyPress(event) {
+            if (currentAnimation !== null) return;
+
+            switch (event.key) {
+                case '1':
+                    playAnimation('attack1');
+                    break;
+                case '2':
+                    playAnimation('attack2');
+                    break;
+                case '3':
+                    playAnimation('attack3');
+                    break;
+            }
+        }
+
+        function playAnimation(animationName) {
+            const animation = config.animations[animationName];
+            if (!animation) return;
+
+            currentAnimation = animationName;
+            currentFrame = 0;
+
+            drawFrame();
+            animationTimer = setInterval(updateAnimation, animation.frameDuration);
+        }
+
+        function updateAnimation() {
+            const animation = config.animations[currentAnimation];
+            currentFrame++;
+
+            if (currentFrame >= animation.frameCount) {
+                stopAnimation();
+                return;
+            }
+
+            drawFrame();
+        }
+
+        function stopAnimation() {
+            clearInterval(animationTimer);
+            currentAnimation = null;
+            drawIdle();
+        }
+
+        function drawFrame() {
+            if (!currentAnimation) return;
+
+            const animation = config.animations[currentAnimation];
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const sourceX = currentFrame * spriteWidth;
+            const sourceY = animation.row * spriteHeight;
+
+            ctx.drawImage(
+                tileset,
+                sourceX, sourceY, spriteWidth, spriteHeight,
+                50, 50, 200, 300
+            );
+
+            ctx.fillStyle = 'black';
+            ctx.font = '16px Arial';
+            ctx.fillText(`Animation ${animation.row + 1}, Frame ${currentFrame + 1}`, 80, 370);
+        }
+
+        function drawIdle() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (tileset && tileset.complete) {
+                ctx.drawImage(
+                    tileset,
+                    0, 0, spriteWidth, spriteHeight,
+                    50, 50, 200, 300
+                );
+
+                ctx.fillStyle = 'black';
+                ctx.font = '16px Arial';
+                ctx.fillText('État de repos (prêt à attaquer)', 60, 370);
+            }
+        }
+
+        // Activation du clavier
+        window.addEventListener('keydown', handleKeyPress);
+    </script>
+</body>
+
+</html>

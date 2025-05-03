@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Combat 2D</title>
+  <style>
+    body { margin: 0; background: #111; }
+    canvas { display: block; margin: auto; background: #333; }
+  </style>
+</head>
+<body>
+  <canvas id="gameCanvas" width="1500" height="450"></canvas>
+
+  <!-- Liens vers les scripts -->
+  <script type="module" src="js/controls.js"></script>   <!-- Contrôles des joueurs -->
+  <script type="module" src="js/animations.js"></script>   <!-- Définition des animations -->
+  <script type="module" src="js/personnage.js"></script>   <!-- Classe Personnage -->
+  <script type="module" src="js/personnages/joueur1.js"></script> <!-- Définition joueur 1 -->
+  <script type="module" src="js/personnages/joueur2.js"></script> <!-- Définition joueur 2 -->
+  <script type="module" src="js/main.js"></script>         <!-- Boucle de jeu et initialisation -->
+</body>
+</html>

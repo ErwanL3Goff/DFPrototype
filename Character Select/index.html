@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sélection de Personnage</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1 class="game-title">SELECT UR FIGHTER</h1>
+  
+    <div class="selection-container">
+      <!-- Joueur 1 -->
+      <div class="player-info" id="p1-info">
+        <img id="p1-portrait" class="player-portrait" />
+        <div class="player-name" id="p1-name"></div>
+        <div class="player-style" id="p1-style"></div>
+      </div>
+  
+      <!-- Grille centrale -->
+      <div class="grid-case">
+        <div class="grid-container" id="character-grid"></div>
+      </div>
+  
+      <!-- Joueur 2 -->
+      <div class="player-info" id="p2-info">
+        <img id="p2-portrait" class="player-portrait" />
+        <div class="player-name" id="p2-name"></div>
+        <div class="player-style" id="p2-style"></div>
+      </div>
+    </div>
+  
+    <button id="start-button">COMMENCER LE COMBAT!</button>
+  
+    <script>
+      const GRID_COLS = 5;
+      const GRID_ROWS = 4;
+  
+      let p1Position = { x: 0, y: 0 };
+      let p2Position = { x: 1, y: 0 };
+      let p1Selection = null;
+      let p2Selection = null;
+      let cells = [];
+  
+      const p1Portrait = document.getElementById('p1-portrait');
+      const p2Portrait = document.getElementById('p2-portrait');
+      const p1Name = document.getElementById('p1-name');
+      const p2Name = document.getElementById('p2-name');
+      const p1Style = document.getElementById('p1-style');
+      const p2Style = document.getElementById('p2-style');
+      const startButton = document.getElementById('start-button');
+  
+      fetch('characters.json')
+        .then(res => res.json())
+        .then(characters => {
+          const grid = document.getElementById('character-grid');
+  
+          characters.forEach(character => {
+            const cell = document.createElement('div');
+            cell.classList.add('character-cell');
+            cell.dataset.name = character.name;
+            cell.dataset.style = character.style;
+            cell.dataset.portrait = character.portraitImage || '';
+            if (character.cellImage) {
+              const img = document.createElement('img');
+              img.src = character.cellImage;
+              cell.appendChild(img);
+            }
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'character-name';
+            nameSpan.textContent = character.name;
+            cell.appendChild(nameSpan);
+            grid.appendChild(cell);
+          });
+  
+          cells = document.querySelectorAll('.character-cell');
+          updateCursors();
+          updatePlayerInfos();
+        });
+  
+      function getCellIndex(pos) {
+        return pos.y * GRID_COLS + pos.x;
+      }
+  
+      function updateCursors() {
+        cells.forEach(c => c.classList.remove('p1-cursor', 'p2-cursor'));
+        if (!p1Selection) cells[getCellIndex(p1Position)].classList.add('p1-cursor');
+        if (!p2Selection) cells[getCellIndex(p2Position)].classList.add('p2-cursor');
+      }
+  
+      function updatePlayerInfos() {
+        if (!p1Selection) {
+          const cell = cells[getCellIndex(p1Position)];
+          p1Name.textContent = cell.dataset.name;
+          p1Style.textContent = cell.dataset.style;
+          p1Portrait.src = cell.dataset.portrait;
+        }
+  
+        if (!p2Selection) {
+          const cell = cells[getCellIndex(p2Position)];
+          p2Name.textContent = cell.dataset.name;
+          p2Style.textContent = cell.dataset.style;
+          p2Portrait.src = cell.dataset.portrait;
+        }
+      }
+  
+      function selectCharacter(player) {
+        const pos = player === 1 ? p1Position : p2Position;
+        const cell = cells[getCellIndex(pos)];
+        cell.classList.add(player === 1 ? 'p1-selected' : 'p2-selected');
+  
+        if (player === 1) {
+          p1Selection = cell.dataset.name;
+          p1Name.textContent = cell.dataset.name;
+          p1Style.textContent = cell.dataset.style;
+          p1Portrait.src = cell.dataset.portrait;
+        } else {
+          p2Selection = cell.dataset.name;
+          p2Name.textContent = cell.dataset.name;
+          p2Style.textContent = cell.dataset.style;
+          p2Portrait.src = cell.dataset.portrait;
+        }
+  
+        if (p1Selection && p2Selection) {
+          startButton.style.display = 'block';
+        }
+      }
+  
+      document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        if (!p1Selection) {
+          if (key === 'arrowup' && p1Position.y > 0) p1Position.y--;
+          else if (key === 'arrowdown' && p1Position.y < GRID_ROWS - 1) p1Position.y++;
+          else if (key === 'arrowleft' && p1Position.x > 0) p1Position.x--;
+          else if (key === 'arrowright' && p1Position.x < GRID_COLS - 1) p1Position.x++;
+          else if (key === '1') selectCharacter(1);
+        }
+        if (!p2Selection) {
+          if (key === 'z' && p2Position.y > 0) p2Position.y--;
+          else if (key === 's' && p2Position.y < GRID_ROWS - 1) p2Position.y++;
+          else if (key === 'q' && p2Position.x > 0) p2Position.x--;
+          else if (key === 'd' && p2Position.x < GRID_COLS - 1) p2Position.x++;
+          else if (key === 'k') selectCharacter(2);
+        }
+  
+        updateCursors();
+        updatePlayerInfos();
+      });
+  
+      startButton.addEventListener('click', () => {
+        alert(`FIGHT! ${p1Selection} vs ${p2Selection}`);
+        window.location = "../Char/Test/index.html";
+      });
+    </script>
+  </body>
+</html>

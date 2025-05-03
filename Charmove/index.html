@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Déplacement personnage</title>
+    <style>
+        canvas {
+            background: #eee;
+            display: block;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="800" height="400"></canvas>
+    <script>
+        const canvas = document.getElementById("gameCanvas");
+        const ctx = canvas.getContext("2d");
+
+        const sprite = new Image();
+        sprite.src = "Tilsetcharmodel.png";
+
+        const FRAME_WIDTH = 164;
+        const FRAME_HEIGHT = 322;
+
+        const GROUND = canvas.height - FRAME_HEIGHT;
+
+        let frameIndex = 0;
+        let frameCount = 6;
+        let frameTimer = 0;
+        let frameInterval = 100;
+
+        let x = 100;
+        let y = GROUND;
+        let vx = 0;
+        let vy = 0;
+        let onGround = true;
+
+        let keys = {
+            left: false,
+            right: false,
+            up: false
+        };
+
+        function update(deltaTime) {
+            vx = 0;
+
+            if (keys.left) vx = -3;
+            if (keys.right) vx = 3;
+
+            if (keys.up && onGround) {
+                vy = -10;
+                onGround = false;
+            }
+
+            x += vx;
+            y += vy;
+            vy += 0.5; // gravité
+
+            if (y >= GROUND) {
+                y = GROUND;
+                vy = 0;
+                onGround = true;
+            }
+
+            // Animation
+            frameTimer += deltaTime;
+            if (frameTimer >= frameInterval) {
+                frameTimer = 0;
+                frameIndex = (frameIndex + 1) % frameCount;
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            let row = 0; // statique
+            if (!onGround) row = 2; // saut
+            else if (vx !== 0) row = 1; // marche
+
+            ctx.drawImage(
+                sprite,
+                frameIndex * FRAME_WIDTH,
+                row * FRAME_HEIGHT,
+                FRAME_WIDTH,
+                FRAME_HEIGHT,
+                x,
+                y,
+                FRAME_WIDTH,
+                FRAME_HEIGHT
+            );
+        }
+
+        let lastTime = 0;
+        function gameLoop(timestamp) {
+            const deltaTime = timestamp - lastTime;
+            lastTime = timestamp;
+
+            update(deltaTime);
+            draw();
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        window.addEventListener("keydown", e => {
+            if (e.code === "ArrowLeft") keys.left = true;
+            if (e.code === "ArrowRight") keys.right = true;
+            if (e.code === "ArrowUp") keys.up = true;
+        });
+
+        window.addEventListener("keyup", e => {
+            if (e.code === "ArrowLeft") keys.left = false;
+            if (e.code === "ArrowRight") keys.right = false;
+            if (e.code === "ArrowUp") keys.up = false;
+        });
+
+        sprite.onload = () => {
+            requestAnimationFrame(gameLoop);
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,105 @@
+[
+    {
+        "name": "JAYTOKI",
+        "style": "ZONER",
+        "cellImage": "../Char/Jaytoki/cell.jpg",
+        "portraitImage": "../Char/Jaytoki/portrait.jpg"
+    },
+    {
+        "name": "SUZUKI",
+        "style": "MIX-UP",
+        "cellImage": "../Char/Suzuki/cell.jpg",
+        "portraitImage": "../Char/Suzuki/portrait.jpg"
+    },
+    {
+        "name": "JIN",
+        "style": "SHOTO/COMBO",
+        "cellImage": "../Char/Jin/cell.jpg",
+        "portraitImage": "../Char/Jin/portrait.jpg"
+    },
+    {
+        "name": "KIMIKO",
+        "style": "RUSHDOWN/SETUP",
+        "cellImage": "../Char/Kimiko/cell.jpg",
+        "portraitImage": "../Char/Kimiko/portrait.jpg"
+    },
+    {
+        "name": "ROBERT",
+        "style": "GRAPPLER",
+        "cellImage": "../Char/Robert/cell.jpg",
+        "portraitImage": "../Char/Robert/portrait.jpg"
+    },
+    {
+        "name": "ROSALINE",
+        "style": "ZONER/TRAP",
+        "cellImage": "../Char/Rosaline/cell.jpg",
+        "portraitImage": "../Char/Rosaline/portrait.jpg"
+    },
+    {
+        "name": "IKE",
+        "style": "SHOTO/BALANCE",
+        "cellImage": "../Char/Ike/cell.jpg",
+        "portraitImage": "../Char/Ike/portrait.jpg"
+    },
+    {
+        "name": "JANE",
+        "style": "SHOTO/RUSHDOWN",
+        "cellImage": "../Char/Jane/cell.jpg",
+        "portraitImage": "../Char/Jane/portrait.jpg"
+    },
+    {
+        "name": "TIM",
+        "style": "GRAPPLER/SETUP",
+        "cellImage": "../Char/Tim/cell.jpg",
+        "portraitImage": "../Char/Tim/portrait.jpg"
+    },
+    {
+        "name": "EVA",
+        "style": "MIX-UP",
+        "cellImage": "../Char/Eva/cell.jpg",
+        "portraitImage": "../Char/Eva/portrait.jpg"
+    },
+    {
+        "name": "DOOM SLAYER",
+        "style": "ZONER/MIX-UP",
+        "cellImage": "../Char/Forest/cell.jpg",
+        "portraitImage": "../Char/Forest/portrait.jpg"
+    },
+    {
+        "name": "DUKE NUKEM",
+        "style": "ZONER/MIX-UP",
+        "cellImage": "../Char/DUKE/cell.jpg",
+        "portraitImage": "../Char/DUKE/portrait.jpg"
+    },
+    {
+        "name": "PRISCILLA",
+        "style": "ZONER/MIX-UP",
+        "cellImage": "../Char/Priscilla/cell.jpg",
+        "portraitImage": "../Char/Priscilla/portrait.jpg"
+    },
+    {
+        "name": "EDUARDO",
+        "style": "ZONER/RUSHDOWN",
+        "cellImage": "../Char/Edouardo/cell.jpg",
+        "portraitImage": "../Char/Edouardo/portrait.jpg"
+    },
+    {
+        "name": "ANNI-LISA",
+        "style": "GRAPPLER/MIX-UP",
+        "cellImage": "../Char/Anni-Lisa/cell.jpg",
+        "portraitImage": "../Char/Anni-lisa/portrait.jpg"
+    },
+    {
+        "name": "KAFKA HIBINO",
+        "style": "GUEST CHARACTER",
+        "cellImage":"../Char/Kafka/cell.jpg",
+        "portraitImage": "../Char/Kafka/portrait.jpg"
+    },
+    {
+        "name": "JINWO",
+        "style": "GUEST CHARACTER",
+        "cellImage":"../Char/Jinwo/cell.jpg",
+        "portraitImage": "../Char/Jinwol/portrait.jpg"
+    }
+    
+]
