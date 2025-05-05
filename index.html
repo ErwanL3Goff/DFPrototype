@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,30 +21,45 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .title-glow {
             filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.8));
         }
-        
+
         .floating {
             animation: float 3s ease-in-out infinite;
         }
-        
+
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
+            0% {
+                transform: translateY(0px);
+            }
+
+            50% {
+                transform: translateY(-15px);
+            }
+
+            100% {
+                transform: translateY(0px);
+            }
         }
-        
+
         .pulse {
             animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
         }
-        
+
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
         }
-        
+
         .game-container {
             position: relative;
             width: 100%;
@@ -54,7 +70,7 @@
             justify-content: center;
             align-items: center;
         }
-        
+
         .game-logo-container {
             position: relative;
             display: flex;
@@ -62,11 +78,11 @@
             width: 100%;
             margin-bottom: 4rem;
         }
-        
+
         .game-logo {
             position: relative;
             text-shadow: 3px 3px 5px rgba(0, 0, 0, 0.5),
-                         0 0 20px rgba(255, 215, 0, 0.8);
+                0 0 20px rgba(255, 215, 0, 0.8);
         }
 
         .game-logo::after {
@@ -79,7 +95,7 @@
             transform: rotate(15deg);
             filter: drop-shadow(0 0 8px rgba(66, 153, 225, 0.8));
         }
-        
+
         .characters-container {
             position: relative;
             width: 100%;
@@ -88,38 +104,45 @@
             justify-content: center;
             align-items: flex-end;
         }
-        
+
         .character {
             position: absolute;
-            width: 120px;
-            height: 200px;
-            border-radius: 60px 60px 0 0;
+            width: 240px;
+            height: 400px;
         }
-        
+
         .character-left {
             left: calc(50% - 200px);
             transform: translateX(-50%);
-            background-color: rgba(255, 208, 0, 0.8);
+            background-image: url('Character Select/Tim.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 3;
         }
-        
+
         .character-center {
             left: 50%;
             transform: translateX(-50%);
-            background-color: rgba(37, 99, 235, 0.8);
-            height: 220px;
+            background-image: url('Character Select/Suzuki.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        
+
         .character-right {
-            left: calc(50% + 200px);
-            transform: translateX(-50%);
-            background-color: rgba(239, 68, 68, 0.8);
+            left: calc(38% + 200px);
+            background-image: url('Character Select/Ike.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
         }
-        
+
         .enter-prompt {
             margin-top: 4rem;
             text-align: center;
         }
-        
+
         .enter-key {
             position: relative;
             display: inline-block;
@@ -129,21 +152,21 @@
             border: 1px solid #4a5568;
             box-shadow: 0 2px 0 #2d3748;
         }
-        
+
         .enter-key::after {
             content: '↵';
             position: absolute;
             right: 5px;
             top: 0;
         }
-        
+
         .copyright {
             position: absolute;
             bottom: 20px;
             width: 100%;
             text-align: center;
         }
-        
+
         /* Overlay pour assombrir légèrement l'arrière-plan */
         .overlay {
             position: fixed;
@@ -156,9 +179,10 @@
         }
     </style>
 </head>
+
 <body>
     <div class="overlay"></div>
-    
+
     <div class="game-container">
         <!-- Logo et titre du jeu -->
         <div class="game-logo-container">
@@ -166,60 +190,61 @@
                 NINJA STORM
             </h1>
         </div>
-        
+
         <h2 id="subtitle" class="text-3xl font-semibold text-white opacity-0 text-center">
             DIGITAL FIGHTER
         </h2>
-        
+
         <!-- Personnages silhouettés -->
         <div id="characters" class="characters-container opacity-0">
             <div class="character character-left"></div>
             <div class="character character-center"></div>
             <div class="character character-right"></div>
         </div>
-        
+
         <!-- Instruction pour démarrer -->
         <div id="startPrompt" class="enter-prompt opacity-0">
-            <p class="text-white text-2xl mb-4 pulse">Appuyez sur <span class="enter-key">Entrée</span> pour commencer</p>
+            <p class="text-white text-2xl mb-4 pulse">Appuyez sur <span class="enter-key">Entrée</span> pour commencer
+            </p>
         </div>
-        
+
         <div class="copyright">
             <p class="text-gray-300 text-sm">© 2025 Digital Finger - Le combat ultime</p>
         </div>
     </div>
-    
+
     <script>
         // Animations avec GSAP
-        window.onload = function() {
+        window.onload = function () {
             // Animation du titre
             gsap.from("#gameTitle", {
                 y: -100,
-                opacity: 0, 
+                opacity: 0,
                 duration: 1.5,
                 ease: "elastic.out(1, 0.5)"
             });
-            
+
             // Animation du sous-titre
             gsap.to("#subtitle", {
                 opacity: 1,
                 duration: 1,
                 delay: 0.8
             });
-            
+
             // Animation des personnages
             gsap.to("#characters", {
                 opacity: 1,
                 duration: 1.2,
                 delay: 1.2
             });
-            
+
             // Animation de l'instruction
             gsap.to("#startPrompt", {
                 opacity: 1,
                 duration: 1,
                 delay: 2
             });
-            
+
             // Animation subtile des personnages
             gsap.to(".character-left", {
                 y: -10,
@@ -229,7 +254,7 @@
                 ease: "sine.inOut",
                 delay: 1.5
             });
-            
+
             gsap.to(".character-center", {
                 y: -15,
                 duration: 3,
@@ -238,7 +263,7 @@
                 ease: "sine.inOut",
                 delay: 1.8
             });
-            
+
             gsap.to(".character-right", {
                 y: -8,
                 duration: 2.8,
@@ -248,16 +273,16 @@
                 delay: 2.1
             });
         }
-        
+
         // Détection de la touche Entrée
-        document.addEventListener('keydown', function(event) {
+        document.addEventListener('keydown', function (event) {
             if (event.key === 'Enter') {
                 // Animation de transition
                 gsap.to(".game-container", {
                     opacity: 0,
                     scale: 1.1,
                     duration: 0.5,
-                    onComplete: function() {
+                    onComplete: function () {
                         // Redirection vers la page du jeu
                         window.location.href = "Character Select/index.html";
                     }
@@ -266,4 +291,5 @@
         });
     </script>
 </body>
+
 </html>
