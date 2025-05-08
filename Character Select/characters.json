@@ -68,8 +68,8 @@
     {
         "name": "DUKE NUKEM",
         "style": "ZONER/MIX-UP",
-        "cellImage": "../Char/DUKE/cell.jpg",
-        "portraitImage": "../Char/DUKE/portrait.jpg"
+        "cellImage": "../Char/Duke Nukem/cell.jpg",
+        "portraitImage": "../Char/Duke Nukem/portrait.jpg"
     },
     {
         "name": "PRISCILLA",
