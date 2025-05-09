@@ -96,10 +96,10 @@
         "portraitImage": "../Char/Kafka/portrait.jpg"
     },
     {
-        "name": "JINWO",
+        "name": "JINWOO",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Jinwo/cell.jpg",
-        "portraitImage": "../Char/Jinwol/portrait.jpg"
+        "cellImage":"../Char/Jinwoo/cell.jpg",
+        "portraitImage": "../Char/Jinwoo/portrait.jpg"
     }
     
 ]
