@@ -100,6 +100,23 @@
         "style": "GUEST CHARACTER",
         "cellImage":"../Char/Jinwoo/cell.jpg",
         "portraitImage": "../Char/Jinwoo/portrait.jpg"
+    },
+        {
+        "name": "ASUKA",
+        "style": "GUEST CHARACTER",
+        "cellImage":"../Char/Asuka/cell.jpg",
+        "portraitImage": "../Char/Asuka/portrait.jpg"
+    },
+        {
+        "name": "MORPHEUS",
+        "style": "GUEST CHARACTER",
+        "cellImage":"../Char/Morpheus/cell.jpg",
+        "portraitImage": "../Char/Morpheus/portrait.jpg"
+    },
+        {
+        "name": "BAKI",
+        "style": "GUEST CHARACTER",
+        "cellImage":"../Char/Baki/cell.jpg",
+        "portraitImage": "../Char/Baki/portrait.jpg"
     }
-    
 ]
