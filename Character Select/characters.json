@@ -60,13 +60,13 @@
         "portraitImage": "../Char/Eva/portrait.jpg"
     },
     {
-        "name": "DOOM SLAYER",
+        "name": "ENKIDOU",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Forest/cell.jpg",
         "portraitImage": "../Char/Forest/portrait.jpg"
     },
     {
-        "name": "DUKE NUKEM",
+        "name": "GILGAMESH",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Duke Nukem/cell.jpg",
         "portraitImage": "../Char/Duke Nukem/portrait.jpg"
