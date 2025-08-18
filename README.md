@@ -1,7 +1,14 @@
 # DFPrototype
 Test : https://digital-fighter.onrender.com
-Appuyez sur entrer pour lancer la sélection du personnage.
-Le joueur 1 doit utiliser les flèches du clavier pour se déplacer et sélectionner avec 1.
-Le joueur 2 doit utiliser les touches Q, S, D, Z du clavier pour se déplacer et sélectionner avec k.
-Une fois les personnages sélectionnés, cliquez sur commencer le combat.
-Vous pouvez vous déplacer et ataquer (1, 2, 3 pour le joueur 1 et K, L, M pour le joueur 2).
+
+Appuyez sur Entrée pour lancer l’écran de sélection des personnages.
+
+Joueur 1 : déplacez-vous avec les flèches du clavier et validez votre choix avec la touche 1.
+Joueur 2 : déplacez-vous avec les touches Z, Q, S, D et validez votre choix avec la touche K.
+
+Une fois vos personnages choisis, cliquez sur Commencer le combat.
+
+Pendant la partie :
+
+Joueur 1 : se déplace avec les flèches et attaque avec 1, 2 ou 3.
+Joueur 2 : se déplace avec Z, Q, S, D et attaque avec K, L ou M.
