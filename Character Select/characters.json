@@ -3,120 +3,160 @@
         "name": "JAYTOKI",
         "style": "ZONER",
         "cellImage": "../Char/Jaytoki/cell.jpg",
-        "portraitImage": "../Char/Jaytoki/portrait.jpg"
+        "portraitImage": "../Char/Jaytoki/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Clint Eastwood", "Cassandra Tornado"]
     },
     {
         "name": "SUZUKI",
         "style": "MIX-UP",
         "cellImage": "../Char/Suzuki/cell.jpg",
-        "portraitImage": "../Char/Suzuki/portrait.jpg"
-    },
-    {
-        "name": "JIN",
-        "style": "SHOTO/COMBO",
-        "cellImage": "../Char/Jin/cell.jpg",
-        "portraitImage": "../Char/Jin/portrait.jpg"
-    },
-    {
-        "name": "KIMIKO",
-        "style": "RUSHDOWN/SETUP",
-        "cellImage": "../Char/Kimiko/cell.jpg",
-        "portraitImage": "../Char/Kimiko/portrait.jpg"
-    },
-    {
-        "name": "ROBERT",
-        "style": "GRAPPLER",
-        "cellImage": "../Char/Robert/cell.jpg",
-        "portraitImage": "../Char/Robert/portrait.jpg"
-    },
-    {
-        "name": "ROSALINE",
-        "style": "ZONER/TRAP",
-        "cellImage": "../Char/Rosaline/cell.jpg",
-        "portraitImage": "../Char/Rosaline/portrait.jpg"
-    },
-    {
-        "name": "IKE",
-        "style": "SHOTO/BALANCE",
-        "cellImage": "../Char/Ike/cell.jpg",
-        "portraitImage": "../Char/Ike/portrait.jpg"
-    },
-    {
-        "name": "JANE",
-        "style": "SHOTO/RUSHDOWN",
-        "cellImage": "../Char/Jane/cell.jpg",
-        "portraitImage": "../Char/Jane/portrait.jpg"
+        "portraitImage": "../Char/Suzuki/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset2.png",
+        "specialMoves": ["Shadow Strike", "Wind Blade"]
     },
     {
         "name": "TIM",
         "style": "GRAPPLER/SETUP",
         "cellImage": "../Char/Tim/cell.jpg",
-        "portraitImage": "../Char/Tim/portrait.jpg"
+        "portraitImage": "../Char/Tim/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Power Slam", "Earth Crusher"]
+    },
+    {
+        "name": "IKE",
+        "style": "SHOTO/BALANCE",
+        "cellImage": "../Char/Ike/cell.jpg",
+        "portraitImage": "../Char/Ike/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Hadouken", "Shoryuken", "Tatsumaki"]
+    },
+    {
+        "name": "JIN",
+        "style": "SHOTO/COMBO",
+        "cellImage": "../Char/Jin/cell.jpg",
+        "portraitImage": "../Char/Jin/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Orochi Slash", "Flame Punch"]
+    },
+    {
+        "name": "KIMIKO",
+        "style": "RUSHDOWN/SETUP",
+        "cellImage": "../Char/Kimiko/cell.jpg",
+        "portraitImage": "../Char/Kimiko/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Shadow Clone", "Lightning Strike"]
+    },
+    {
+        "name": "ROBERT",
+        "style": "GRAPPLER",
+        "cellImage": "../Char/Robert/cell.jpg",
+        "portraitImage": "../Char/Robert/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Power Bomb", "Suplex"]
+    },
+    {
+        "name": "ROSALINE",
+        "style": "ZONER/TRAP",
+        "cellImage": "../Char/Rosaline/cell.jpg",
+        "portraitImage": "../Char/Rosaline/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Magic Trap", "Energy Beam"]
+    },
+    {
+        "name": "JANE",
+        "style": "SHOTO/RUSHDOWN",
+        "cellImage": "../Char/Jane/cell.jpg",
+        "portraitImage": "../Char/Jane/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Dragon Kick", "Tiger Uppercut"]
     },
     {
         "name": "EVA",
         "style": "MIX-UP",
         "cellImage": "../Char/Eva/cell.jpg",
-        "portraitImage": "../Char/Eva/portrait.jpg"
+        "portraitImage": "../Char/Eva/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Teleport Punch", "Mind Blast"]
     },
     {
-        "name": "ENKIDOU",
+        "name": "FOREST",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Forest/cell.jpg",
-        "portraitImage": "../Char/Forest/portrait.jpg"
+        "portraitImage": "../Char/Forest/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Vine Whip", "Nature's Wrath"]
     },
     {
-        "name": "GILGAMESH",
+        "name": "DUKE NUKEM",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Duke Nukem/cell.jpg",
-        "portraitImage": "../Char/Duke Nukem/portrait.jpg"
+        "portraitImage": "../Char/Duke Nukem/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Rocket Launcher", "Shrink Ray"]
     },
     {
         "name": "PRISCILLA",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Priscilla/cell.jpg",
-        "portraitImage": "../Char/Priscilla/portrait.jpg"
+        "portraitImage": "../Char/Priscilla/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Dark Slash", "Blood Moon"]
     },
     {
-        "name": "EDUARDO",
+        "name": "EDOUARDO",
         "style": "ZONER/RUSHDOWN",
         "cellImage": "../Char/Edouardo/cell.jpg",
-        "portraitImage": "../Char/Edouardo/portrait.jpg"
+        "portraitImage": "../Char/Edouardo/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Fire Ball", "Sonic Boom"]
     },
     {
         "name": "ANNI-LISA",
         "style": "GRAPPLER/MIX-UP",
         "cellImage": "../Char/Anni-Lisa/cell.jpg",
-        "portraitImage": "../Char/Anni-lisa/portrait.jpg"
+        "portraitImage": "../Char/Anni-Lisa/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Ice Smash", "Frost Bite"]
     },
     {
-        "name": "KAIJU N°8",
+        "name": "KAFKA",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Kafka/cell.jpg",
-        "portraitImage": "../Char/Kafka/portrait.jpg"
+        "cellImage": "../Char/Kafka/cell.jpg",
+        "portraitImage": "../Char/Kafka/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Monster Punch", "Kaiju Roar"]
     },
     {
         "name": "JINWOO",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Jinwoo/cell.jpg",
-        "portraitImage": "../Char/Jinwoo/portrait.jpg"
+        "cellImage": "../Char/Jinwoo/cell.jpg",
+        "portraitImage": "../Char/Jinwoo/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Shadow Army", "Assassin Blade"]
     },
-        {
+    {
         "name": "ASUKA",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Asuka/cell.jpg",
-        "portraitImage": "../Char/Asuka/portrait.jpg"
+        "cellImage": "../Char/Asuka/cell.jpg",
+        "portraitImage": "../Char/Asuka/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Aerial Combo", "Phoenix Dive"]
     },
-        {
+    {
         "name": "MORPHEUS",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Morpheus/cell.jpg",
-        "portraitImage": "../Char/Morpheus/portrait.jpg"
+        "cellImage": "../Char/Morpheus/cell.jpg",
+        "portraitImage": "../Char/Morpheus/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Matrix Dodge", "Reality Bend"]
     },
-        {
+    {
         "name": "BAKI",
         "style": "GUEST CHARACTER",
-        "cellImage":"../Char/Baki/cell.jpg",
-        "portraitImage": "../Char/Baki/portrait.jpg"
+        "cellImage": "../Char/Baki/cell.jpg",
+        "portraitImage": "../Char/Baki/portrait.jpg",
+        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "specialMoves": ["Demon Back", "Cat Fist"]
     }
 ]

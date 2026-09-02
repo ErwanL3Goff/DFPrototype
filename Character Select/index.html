@@ -121,6 +121,14 @@
       const muteBtn = document.getElementById('mute-btn');
       const volumeIcon = document.getElementById('volume-icon');
       
+      // Afficher les coups spéciaux dans l'interface
+      function displaySpecialMoves(player, moves) {
+        const styleElement = player === 1 ? p1Style : p2Style;
+        if (moves && moves.length > 0) {
+          styleElement.textContent = `${styleElement.dataset.baseStyle || ''} - ${moves.join(', ')}`;
+        }
+      }
+      
       // Démarrer la musique automatiquement
       document.addEventListener('DOMContentLoaded', () => {
         // Les navigateurs modernes bloquent la lecture automatique, donc on doit gérer ça
@@ -173,6 +181,8 @@
             cell.dataset.name = character.name;
             cell.dataset.style = character.style;
             cell.dataset.portrait = character.portraitImage || '';
+            cell.dataset.tileset = character.tileset || '../Char/Test/assets/GrandeTileset.png';
+            cell.dataset.specialmoves = JSON.stringify(character.specialMoves || []);
             
             if (character.cellImage) {
               const img = document.createElement('img');
@@ -212,15 +222,19 @@
       function updatePlayerInfos() {
         if (!p1Selection && cells[getCellIndex(p1Position)]) {
           const cell = cells[getCellIndex(p1Position)];
+          const moves = JSON.parse(cell.dataset.specialmoves || '[]');
           p1Name.textContent = cell.dataset.name;
-          p1Style.textContent = cell.dataset.style;
+          p1Style.dataset.baseStyle = cell.dataset.style;
+          p1Style.textContent = moves.length > 0 ? `${cell.dataset.style} - ${moves.join(', ')}` : cell.dataset.style;
           p1Portrait.src = cell.dataset.portrait;
         }
   
         if (!p2Selection && cells[getCellIndex(p2Position)]) {
           const cell = cells[getCellIndex(p2Position)];
+          const moves = JSON.parse(cell.dataset.specialmoves || '[]');
           p2Name.textContent = cell.dataset.name;
-          p2Style.textContent = cell.dataset.style;
+          p2Style.dataset.baseStyle = cell.dataset.style;
+          p2Style.textContent = moves.length > 0 ? `${cell.dataset.style} - ${moves.join(', ')}` : cell.dataset.style;
           p2Portrait.src = cell.dataset.portrait;
         }
       }
@@ -230,15 +244,27 @@
         const cell = cells[getCellIndex(pos)];
         cell.classList.add(player === 1 ? 'p1-selected' : 'p2-selected');
   
+        const moves = JSON.parse(cell.dataset.specialmoves || '[]');
+        
         if (player === 1) {
-          p1Selection = cell.dataset.name;
+          p1Selection = {
+            name: cell.dataset.name,
+            tileset: cell.dataset.tileset,
+            specialMoves: moves
+          };
           p1Name.textContent = cell.dataset.name;
-          p1Style.textContent = cell.dataset.style;
+          p1Style.dataset.baseStyle = cell.dataset.style;
+          p1Style.textContent = moves.length > 0 ? `${cell.dataset.style} - ${moves.join(', ')}` : cell.dataset.style;
           p1Portrait.src = cell.dataset.portrait;
         } else {
-          p2Selection = cell.dataset.name;
+          p2Selection = {
+            name: cell.dataset.name,
+            tileset: cell.dataset.tileset,
+            specialMoves: moves
+          };
           p2Name.textContent = cell.dataset.name;
-          p2Style.textContent = cell.dataset.style;
+          p2Style.dataset.baseStyle = cell.dataset.style;
+          p2Style.textContent = moves.length > 0 ? `${cell.dataset.style} - ${moves.join(', ')}` : cell.dataset.style;
           p2Portrait.src = cell.dataset.portrait;
         }
   
@@ -250,13 +276,17 @@
   
       function startFight() {
         if (p1Selection && p2Selection) {
+          // Sauvegarder les sélections dans localStorage pour les transmettre au jeu
+          localStorage.setItem('p1Character', JSON.stringify(p1Selection));
+          localStorage.setItem('p2Character', JSON.stringify(p2Selection));
+          
           // Jouer un son de confirmation avant de rediriger
           const confirmSound = new Audio('');
           confirmSound.volume = 0.5;
           confirmSound.play();
           
           setTimeout(() => {
-            alert(`FIGHT! ${p1Selection} vs ${p2Selection}`);
+            alert(`FIGHT! ${p1Selection.name} vs ${p2Selection.name}\n\n${p1Selection.name} coups spéciaux: ${p1Selection.specialMoves.join(', ')}\n${p2Selection.name} coups spéciaux: ${p2Selection.specialMoves.join(', ')}`);
             window.location = "../Char/Test/index.html";
           }, 500);
         }
