@@ -58,6 +58,24 @@
       #mute-btn {
         @apply fixed bottom-4 right-4 bg-gray-800/50 text-white p-2 rounded-full w-10 h-10 flex items-center justify-center hover:bg-gray-700 transition-all;
       }
+      .special-moves-display {
+        @apply mt-4 p-4 bg-gray-900/80 rounded-lg text-left max-w-md mx-auto;
+      }
+      .move-item {
+        @apply mb-3 p-2 bg-gray-800 rounded border-l-4 border-yellow-500;
+      }
+      .move-name {
+        @apply text-yellow-400 font-bold text-sm;
+      }
+      .move-input {
+        @apply text-green-400 text-xs font-mono;
+      }
+      .move-damage {
+        @apply text-red-400 text-xs float-right;
+      }
+      .move-description {
+        @apply text-gray-300 text-xs mt-1;
+      }
     }
   </style>
 </head>
@@ -98,6 +116,12 @@
       </div>
     </div>
   
+    <!-- Affichage des coups spéciaux du personnage sélectionné -->
+    <div id="special-moves-container" class="special-moves-display hidden">
+      <h3 class="text-yellow-400 font-bold text-lg mb-3">COUPS SPÉCIAUX</h3>
+      <div id="special-moves-list"></div>
+    </div>
+  
     <button id="start-button" class="hidden">COMMENCER LE COMBAT!</button>
   
     <script>
@@ -120,6 +144,37 @@
       const bgMusic = document.getElementById('bg-music');
       const muteBtn = document.getElementById('mute-btn');
       const volumeIcon = document.getElementById('volume-icon');
+      const specialMovesContainer = document.getElementById('special-moves-container');
+      const specialMovesList = document.getElementById('special-moves-list');
+      
+      // Afficher les coups spéciaux dans l'interface
+      function displaySpecialMoves(moves) {
+        if (moves && moves.length > 0) {
+          specialMovesContainer.classList.remove('hidden');
+          specialMovesList.innerHTML = '';
+          
+          moves.forEach(move => {
+            const moveDiv = document.createElement('div');
+            moveDiv.className = 'move-item';
+            moveDiv.innerHTML = `
+              <div class="move-name">${move.name} <span class="move-damage">${move.damage} DMG</span></div>
+              <div class="move-input">${move.input}</div>
+              <div class="move-description">${move.description}</div>
+            `;
+            specialMovesList.appendChild(moveDiv);
+          });
+        } else {
+          specialMovesContainer.classList.add('hidden');
+        }
+      }
+      
+      // Afficher les coups spéciaux dans l'interface
+      function displaySpecialMoves(player, moves) {
+        const styleElement = player === 1 ? p1Style : p2Style;
+        if (moves && moves.length > 0) {
+          styleElement.textContent = `${styleElement.dataset.baseStyle || ''} - ${moves.join(', ')}`;
+        }
+      }
       
       // Démarrer la musique automatiquement
       document.addEventListener('DOMContentLoaded', () => {
@@ -173,6 +228,8 @@
             cell.dataset.name = character.name;
             cell.dataset.style = character.style;
             cell.dataset.portrait = character.portraitImage || '';
+            cell.dataset.tileset = character.tileset || '../Char/Test/assets/GrandeTileset.png';
+            cell.dataset.specialmoves = JSON.stringify(character.specialMoves || []);
             
             if (character.cellImage) {
               const img = document.createElement('img');
@@ -210,18 +267,38 @@
       }
   
       function updatePlayerInfos() {
+        let currentMoves = [];
+        
         if (!p1Selection && cells[getCellIndex(p1Position)]) {
           const cell = cells[getCellIndex(p1Position)];
+          const moves = JSON.parse(cell.dataset.specialmoves || '[]');
           p1Name.textContent = cell.dataset.name;
+          p1Style.dataset.baseStyle = cell.dataset.style;
           p1Style.textContent = cell.dataset.style;
           p1Portrait.src = cell.dataset.portrait;
+          currentMoves = moves;
         }
   
         if (!p2Selection && cells[getCellIndex(p2Position)]) {
           const cell = cells[getCellIndex(p2Position)];
+          const moves = JSON.parse(cell.dataset.specialmoves || '[]');
           p2Name.textContent = cell.dataset.name;
+          p2Style.dataset.baseStyle = cell.dataset.style;
           p2Style.textContent = cell.dataset.style;
           p2Portrait.src = cell.dataset.portrait;
+          // Si P1 a déjà sélectionné, afficher les coups de P2
+          if (p1Selection) {
+            currentMoves = moves;
+          }
+        }
+        
+        // Afficher les coups spéciaux du personnage actuellement survolé
+        if (currentMoves.length > 0 && !p1Selection && !p2Selection) {
+          displaySpecialMoves(currentMoves);
+        } else if (p1Selection && !p2Selection) {
+          displaySpecialMoves(p1Selection.specialMoves);
+        } else {
+          specialMovesContainer.classList.add('hidden');
         }
       }
   
@@ -230,14 +307,27 @@
         const cell = cells[getCellIndex(pos)];
         cell.classList.add(player === 1 ? 'p1-selected' : 'p2-selected');
   
+        const moves = JSON.parse(cell.dataset.specialmoves || '[]');
+        
         if (player === 1) {
-          p1Selection = cell.dataset.name;
+          p1Selection = {
+            name: cell.dataset.name,
+            tileset: cell.dataset.tileset,
+            specialMoves: moves
+          };
           p1Name.textContent = cell.dataset.name;
+          p1Style.dataset.baseStyle = cell.dataset.style;
           p1Style.textContent = cell.dataset.style;
           p1Portrait.src = cell.dataset.portrait;
+          displaySpecialMoves(moves);
         } else {
-          p2Selection = cell.dataset.name;
+          p2Selection = {
+            name: cell.dataset.name,
+            tileset: cell.dataset.tileset,
+            specialMoves: moves
+          };
           p2Name.textContent = cell.dataset.name;
+          p2Style.dataset.baseStyle = cell.dataset.style;
           p2Style.textContent = cell.dataset.style;
           p2Portrait.src = cell.dataset.portrait;
         }
@@ -245,18 +335,52 @@
         if (p1Selection && p2Selection) {
           startButton.classList.remove('hidden');
           startButton.focus();
+          // Afficher les deux sets de coups spéciaux
+          displayBothSpecialMoves();
         }
+      }
+      
+      function displayBothSpecialMoves() {
+        specialMovesContainer.classList.remove('hidden');
+        specialMovesList.innerHTML = `
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <h4 class="text-blue-400 font-bold mb-2">${p1Selection.name}</h4>
+              ${p1Selection.specialMoves.map(move => `
+                <div class="move-item border-blue-500">
+                  <div class="move-name">${move.name} <span class="move-damage">${move.damage} DMG</span></div>
+                  <div class="move-input">${move.input}</div>
+                  <div class="move-description">${move.description}</div>
+                </div>
+              `).join('')}
+            </div>
+            <div>
+              <h4 class="text-red-400 font-bold mb-2">${p2Selection.name}</h4>
+              ${p2Selection.specialMoves.map(move => `
+                <div class="move-item border-red-500">
+                  <div class="move-name">${move.name} <span class="move-damage">${move.damage} DMG</span></div>
+                  <div class="move-input">${move.input}</div>
+                  <div class="move-description">${move.description}</div>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
       }
   
       function startFight() {
         if (p1Selection && p2Selection) {
+          // Sauvegarder les sélections dans localStorage pour les transmettre au jeu
+          localStorage.setItem('p1Character', JSON.stringify(p1Selection));
+          localStorage.setItem('p2Character', JSON.stringify(p2Selection));
+          
           // Jouer un son de confirmation avant de rediriger
           const confirmSound = new Audio('');
           confirmSound.volume = 0.5;
           confirmSound.play();
           
           setTimeout(() => {
-            alert(`FIGHT! ${p1Selection} vs ${p2Selection}`);
+            alert(`FIGHT! ${p1Selection.name} vs ${p2Selection.name}\n\n${p1Selection.name} coups spéciaux: ${p1Selection.specialMoves.map(m => m.name).join(', ')}\n${p2Selection.name} coups spéciaux: ${p2Selection.specialMoves.map(m => m.name).join(', ')}`);
             window.location = "../Char/Test/index.html";
           }, 500);
         }
