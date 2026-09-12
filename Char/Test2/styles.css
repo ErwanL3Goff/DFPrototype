@@ -1,43 +1,120 @@
-body {
-    margin: 0;
+/* styles.css — écran de combat Digital Fighter */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+    height: 100%;
+    background: #0d0a1a;
+    font-family: "Courier New", monospace;
     overflow: hidden;
-    background: #000;
 }
 
-#gameContainer {
+#game-wrapper {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 1280px;
+    height: 720px;
+    transform-origin: center center;
+    left: 50%;
+    top: 50%;
+    margin-left: -640px;
+    margin-top: -360px;
 }
 
-#gameCanvas, #uiCanvas {
-    display: block;
-    margin: 0 auto;
-}
+canvas { display: block; }
 
-#uiCanvas {
+/* ---------- annonces ---------- */
+.announce {
     position: absolute;
-    top: 0;
+    top: 38%;
     left: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 72px;
+    font-weight: bold;
+    color: #ffd24a;
+    text-transform: uppercase;
+    letter-spacing: 6px;
+    text-shadow: 4px 4px 0 #000, 0 0 40px rgba(255, 210, 74, 0.7);
+    opacity: 0;
+    transform: scale(1.4);
+    transition: opacity 0.15s ease-out, transform 0.15s ease-out;
     pointer-events: none;
 }
 
-#loadScreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: #000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
+.announce.visible {
+    opacity: 1;
+    transform: scale(1);
 }
 
-#progressBar {
-    width: 0%;
-    height: 20px;
-    background: #f00;
-    transition: width 0.3s;
+/* ---------- fin de match ---------- */
+.match-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 6, 24, 0.82);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
 }
+
+.match-overlay.visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.match-overlay h1 {
+    color: #ffd24a;
+    font-size: 56px;
+    text-shadow: 4px 4px 0 #000;
+    text-align: center;
+}
+
+.match-overlay .hint { color: #bba9e0; font-size: 18px; }
+
+.match-buttons { display: flex; gap: 20px; }
+
+.match-buttons button {
+    font-family: inherit;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    padding: 14px 38px;
+    cursor: pointer;
+    border: 3px solid #ffd24a;
+    background: #241a4d;
+    color: #ffd24a;
+    transition: transform 0.15s, background 0.15s;
+}
+
+.match-buttons button:hover {
+    background: #ffd24a;
+    color: #241a4d;
+    transform: scale(1.06);
+}
+
+/* ---------- aide contrôles ---------- */
+#controls-help {
+    position: absolute;
+    bottom: 10px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    pointer-events: none;
+}
+
+.ctl {
+    background: rgba(15, 10, 30, 0.75);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #d8cff0;
+}
+
+.ctl.p1 b { color: #4ac0ff; }
+.ctl.p2 b { color: #ff5a5a; }

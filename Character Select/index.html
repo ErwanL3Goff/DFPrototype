@@ -220,7 +220,7 @@
             cell.dataset.name = character.name;
             cell.dataset.style = character.style;
             cell.dataset.portrait = character.portraitImage || '';
-            cell.dataset.tileset = character.tileset || '../Char/Test/assets/GrandeTileset.png';
+            cell.dataset.tileset = character.tileset || '';
             cell.dataset.specialmoves = JSON.stringify(character.specialMoves || []);
             
             if (character.cellImage) {
@@ -362,19 +362,16 @@
   
       function startFight() {
         if (p1Selection && p2Selection) {
-          // Sauvegarder les sélections dans localStorage pour les transmettre au jeu
+          // Sauvegarder les sélections complètes dans localStorage pour le moteur POO (Char/Test2)
           localStorage.setItem('p1Character', JSON.stringify(p1Selection));
           localStorage.setItem('p2Character', JSON.stringify(p2Selection));
           
-          // Jouer un son de confirmation avant de rediriger
-          const confirmSound = new Audio('');
-          confirmSound.volume = 0.5;
-          confirmSound.play();
-          
+          // Transition vers l'écran de combat
+          document.body.style.transition = 'opacity 0.4s ease';
+          document.body.style.opacity = '0';
           setTimeout(() => {
-            alert(`FIGHT! ${p1Selection.name} vs ${p2Selection.name}\n\n${p1Selection.name} coups spéciaux: ${p1Selection.specialMoves.map(m => m.name).join(', ')}\n${p2Selection.name} coups spéciaux: ${p2Selection.specialMoves.map(m => m.name).join(', ')}`);
-            window.location = "../Char/Test/index.html";
-          }, 500);
+            window.location.href = "../Char/Test2/index.html";
+          }, 400);
         }
       }
   

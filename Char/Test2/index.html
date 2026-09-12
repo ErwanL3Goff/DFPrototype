@@ -1,19 +1,35 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-    <title>Jeu de Combat 2D</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Fighter — Combat</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="loadScreen">
-        <div id="progressBar"></div>
+    <div id="game-wrapper">
+        <canvas id="gameCanvas" width="1280" height="720"></canvas>
+
+        <!-- Annonces (ROUND 1 / READY / FIGHT / K.O.) -->
+        <div id="announce" class="announce"></div>
+
+        <!-- Fin de match -->
+        <div id="match-overlay" class="match-overlay">
+            <h1 id="match-result"></h1>
+            <p class="hint">Entrée ou clique pour un rematch &nbsp;·&nbsp; Échap pour revenir à la sélection</p>
+            <div class="match-buttons">
+                <button id="rematch-btn">REMATCH</button>
+                <button id="quit-btn">SÉLECTION</button>
+            </div>
+        </div>
+
+        <!-- Aide contrôles -->
+        <div id="controls-help">
+            <div class="ctl p1"><b>J1</b> Flèches + 1/2/3</div>
+            <div class="ctl p2"><b>J2</b> ZQSD + K/L/M</div>
+        </div>
     </div>
-    
-    <div id="gameContainer">
-        <canvas id="gameCanvas"></canvas>
-        <canvas id="uiCanvas"></canvas>
-    </div>
-    
+
     <script type="module" src="main.js"></script>
 </body>
 </html>

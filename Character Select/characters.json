@@ -4,220 +4,445 @@
         "style": "ZONER",
         "cellImage": "../Char/Jaytoki/cell.jpg",
         "portraitImage": "../Char/Jaytoki/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Jaytoki/sprites_generated/jaytoki_tileset.png",
         "specialMoves": [
-            {"name": "Clint Eastwood", "input": "↓↘→ + P", "damage": 80, "description": "Projectile rapide"},
-            {"name": "Cassandra Tornado", "input": "↓↙← + K", "damage": 100, "description": "Attaque tournoyante"}
-        ]
+            {
+                "name": "Clint Eastwood",
+                "input": "↓↘→ + P",
+                "damage": 80,
+                "description": "Projectile rapide"
+            },
+            {
+                "name": "Cassandra Tornado",
+                "input": "↓↙← + K",
+                "damage": 100,
+                "description": "Attaque tournoyante"
+            }
+        ],
+        "slug": "jaytoki"
     },
     {
         "name": "SUZUKI",
         "style": "MIX-UP",
         "cellImage": "../Char/Suzuki/cell.jpg",
         "portraitImage": "../Char/Suzuki/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset2.png",
+        "tileset": "Char/Suzuki/sprites_generated/suzuki_tileset.png",
         "specialMoves": [
-            {"name": "Shadow Strike", "input": "↓↘→ + P", "damage": 90, "description": "Frappe ombre rapide"},
-            {"name": "Wind Blade", "input": "→↓↘ + K", "damage": 110, "description": "Lame de vent tranchante"}
-        ]
+            {
+                "name": "Shadow Strike",
+                "input": "↓↘→ + P",
+                "damage": 90,
+                "description": "Frappe ombre rapide"
+            },
+            {
+                "name": "Wind Blade",
+                "input": "→↓↘ + K",
+                "damage": 110,
+                "description": "Lame de vent tranchante"
+            }
+        ],
+        "slug": "suzuki"
     },
     {
         "name": "TIM",
         "style": "GRAPPLER/SETUP",
         "cellImage": "../Char/Tim/cell.jpg",
         "portraitImage": "../Char/Tim/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Tim/sprites_generated/tim_tileset.png",
         "specialMoves": [
-            {"name": "Power Slam", "input": "360° + P", "damage": 150, "description": "Projection puissante"},
-            {"name": "Earth Crusher", "input": "↓↙← + P", "damage": 120, "description": "Frappe terrestre"}
-        ]
+            {
+                "name": "Power Slam",
+                "input": "360° + P",
+                "damage": 150,
+                "description": "Projection puissante"
+            },
+            {
+                "name": "Earth Crusher",
+                "input": "↓↙← + P",
+                "damage": 120,
+                "description": "Frappe terrestre"
+            }
+        ],
+        "slug": "tim"
     },
     {
         "name": "IKE",
         "style": "SHOTO/BALANCE",
         "cellImage": "../Char/Ike/cell.jpg",
         "portraitImage": "../Char/Ike/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Ike/sprites_generated/ike_tileset.png",
         "specialMoves": [
-            {"name": "Hadouken", "input": "↓↘→ + P", "damage": 70, "description": "Onde d'énergie projectile"},
-            {"name": "Shoryuken", "input": "→↓↘ + P", "damage": 100, "description": "Uppercut dragon"},
-            {"name": "Tatsumaki", "input": "↓↙← + K", "damage": 90, "description": "Tempête tournoyante"}
-        ]
+            {
+                "name": "Hadouken",
+                "input": "↓↘→ + P",
+                "damage": 70,
+                "description": "Onde d'énergie projectile"
+            },
+            {
+                "name": "Shoryuken",
+                "input": "→↓↘ + P",
+                "damage": 100,
+                "description": "Uppercut dragon"
+            },
+            {
+                "name": "Tatsumaki",
+                "input": "↓↙← + K",
+                "damage": 90,
+                "description": "Tempête tournoyante"
+            }
+        ],
+        "slug": "ike"
     },
     {
         "name": "JIN",
         "style": "SHOTO/COMBO",
         "cellImage": "../Char/Jin/cell.jpg",
         "portraitImage": "../Char/Jin/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Jin/sprites_generated/jin_tileset.png",
         "specialMoves": [
-            {"name": "Orochi Slash", "input": "↓↘→ + P", "damage": 95, "description": "Coupe démoniaque"},
-            {"name": "Flame Punch", "input": "→↓↘ + P", "damage": 105, "description": "Poing enflammé"}
-        ]
+            {
+                "name": "Orochi Slash",
+                "input": "↓↘→ + P",
+                "damage": 95,
+                "description": "Coupe démoniaque"
+            },
+            {
+                "name": "Flame Punch",
+                "input": "→↓↘ + P",
+                "damage": 105,
+                "description": "Poing enflammé"
+            }
+        ],
+        "slug": "jin"
     },
     {
         "name": "KIMIKO",
         "style": "RUSHDOWN/SETUP",
         "cellImage": "../Char/Kimiko/cell.jpg",
         "portraitImage": "../Char/Kimiko/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Kimiko/sprites_generated/kimiko_tileset.png",
         "specialMoves": [
-            {"name": "Shadow Clone", "input": "↓↘→ + P", "damage": 60, "description": "Crée un clone d'ombre"},
-            {"name": "Lightning Strike", "input": "→↓↘ + K", "damage": 115, "description": "Frappe de foudre"}
-        ]
+            {
+                "name": "Shadow Clone",
+                "input": "↓↘→ + P",
+                "damage": 60,
+                "description": "Crée un clone d'ombre"
+            },
+            {
+                "name": "Lightning Strike",
+                "input": "→↓↘ + K",
+                "damage": 115,
+                "description": "Frappe de foudre"
+            }
+        ],
+        "slug": "kimiko"
     },
     {
         "name": "ROBERT",
         "style": "GRAPPLER",
         "cellImage": "../Char/Robert/cell.jpg",
         "portraitImage": "../Char/Robert/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Robert/sprites_generated/robert_tileset.png",
         "specialMoves": [
-            {"name": "Power Bomb", "input": "360° + P", "damage": 160, "description": "Bombe puissante"},
-            {"name": "Suplex", "input": "↓↙← + P", "damage": 140, "description": "Projection classique"}
-        ]
+            {
+                "name": "Power Bomb",
+                "input": "360° + P",
+                "damage": 160,
+                "description": "Bombe puissante"
+            },
+            {
+                "name": "Suplex",
+                "input": "↓↙← + P",
+                "damage": 140,
+                "description": "Projection classique"
+            }
+        ],
+        "slug": "robert"
     },
     {
         "name": "ROSALINE",
         "style": "ZONER/TRAP",
         "cellImage": "../Char/Rosaline/cell.jpg",
         "portraitImage": "../Char/Rosaline/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Rosaline/sprites_generated/rosaline_tileset.png",
         "specialMoves": [
-            {"name": "Magic Trap", "input": "↓↘→ + P", "damage": 75, "description": "Piège magique"},
-            {"name": "Energy Beam", "input": "↓↙← + P", "damage": 95, "description": "Rayon d'énergie"}
-        ]
+            {
+                "name": "Magic Trap",
+                "input": "↓↘→ + P",
+                "damage": 75,
+                "description": "Piège magique"
+            },
+            {
+                "name": "Energy Beam",
+                "input": "↓↙← + P",
+                "damage": 95,
+                "description": "Rayon d'énergie"
+            }
+        ],
+        "slug": "rosaline"
     },
     {
         "name": "JANE",
         "style": "SHOTO/RUSHDOWN",
         "cellImage": "../Char/Jane/cell.jpg",
         "portraitImage": "../Char/Jane/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Jane/sprites_generated/jane_tileset.png",
         "specialMoves": [
-            {"name": "Dragon Kick", "input": "↓↘→ + K", "damage": 100, "description": "Kick du dragon"},
-            {"name": "Tiger Uppercut", "input": "→↓↘ + P", "damage": 110, "description": "Uppercut du tigre"}
-        ]
+            {
+                "name": "Dragon Kick",
+                "input": "↓↘→ + K",
+                "damage": 100,
+                "description": "Kick du dragon"
+            },
+            {
+                "name": "Tiger Uppercut",
+                "input": "→↓↘ + P",
+                "damage": 110,
+                "description": "Uppercut du tigre"
+            }
+        ],
+        "slug": "jane"
     },
     {
         "name": "EVA",
         "style": "MIX-UP",
         "cellImage": "../Char/Eva/cell.jpg",
         "portraitImage": "../Char/Eva/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Eva/sprites_generated/eva_tileset.png",
         "specialMoves": [
-            {"name": "Teleport Punch", "input": "→↓↘ + P", "damage": 85, "description": "Téléportation et frappe"},
-            {"name": "Mind Blast", "input": "↓↘→ + P", "damage": 90, "description": "Explosion mentale"}
-        ]
+            {
+                "name": "Teleport Punch",
+                "input": "→↓↘ + P",
+                "damage": 85,
+                "description": "Téléportation et frappe"
+            },
+            {
+                "name": "Mind Blast",
+                "input": "↓↘→ + P",
+                "damage": 90,
+                "description": "Explosion mentale"
+            }
+        ],
+        "slug": "eva"
     },
     {
         "name": "FOREST",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Forest/cell.jpg",
         "portraitImage": "../Char/Forest/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Forest/sprites_generated/forest_tileset.png",
         "specialMoves": [
-            {"name": "Vine Whip", "input": "↓↘→ + P", "damage": 80, "description": "Fouet de liane"},
-            {"name": "Nature's Wrath", "input": "↓↙← + P", "damage": 105, "description": "Colère de la nature"}
-        ]
+            {
+                "name": "Vine Whip",
+                "input": "↓↘→ + P",
+                "damage": 80,
+                "description": "Fouet de liane"
+            },
+            {
+                "name": "Nature's Wrath",
+                "input": "↓↙← + P",
+                "damage": 105,
+                "description": "Colère de la nature"
+            }
+        ],
+        "slug": "forest"
     },
     {
         "name": "DUKE NUKEM",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Duke Nukem/cell.jpg",
         "portraitImage": "../Char/Duke Nukem/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Duke Nukem/sprites_generated/duke_nukem_tileset.png",
         "specialMoves": [
-            {"name": "Rocket Launcher", "input": "↓↘→ + P", "damage": 120, "description": "Lance-roquettes"},
-            {"name": "Shrink Ray", "input": "↓↙← + P", "damage": 70, "description": "Rayon rétracteur"}
-        ]
+            {
+                "name": "Rocket Launcher",
+                "input": "↓↘→ + P",
+                "damage": 120,
+                "description": "Lance-roquettes"
+            },
+            {
+                "name": "Shrink Ray",
+                "input": "↓↙← + P",
+                "damage": 70,
+                "description": "Rayon rétracteur"
+            }
+        ],
+        "slug": "duke_nukem"
     },
     {
         "name": "PRISCILLA",
         "style": "ZONER/MIX-UP",
         "cellImage": "../Char/Priscilla/cell.jpg",
         "portraitImage": "../Char/Priscilla/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Priscilla/sprites_generated/priscilla_tileset.png",
         "specialMoves": [
-            {"name": "Dark Slash", "input": "↓↘→ + P", "damage": 95, "description": "Coupe sombre"},
-            {"name": "Blood Moon", "input": "↓↙← + P", "damage": 115, "description": "Lune de sang"}
-        ]
+            {
+                "name": "Dark Slash",
+                "input": "↓↘→ + P",
+                "damage": 95,
+                "description": "Coupe sombre"
+            },
+            {
+                "name": "Blood Moon",
+                "input": "↓↙← + P",
+                "damage": 115,
+                "description": "Lune de sang"
+            }
+        ],
+        "slug": "priscilla"
     },
     {
         "name": "EDOUARDO",
         "style": "ZONER/RUSHDOWN",
         "cellImage": "../Char/Edouardo/cell.jpg",
         "portraitImage": "../Char/Edouardo/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Edouardo/sprites_generated/edouardo_tileset.png",
         "specialMoves": [
-            {"name": "Fire Ball", "input": "↓↘→ + P", "damage": 75, "description": "Boule de feu"},
-            {"name": "Sonic Boom", "input": "←↓↙ + P", "damage": 85, "description": "Onde sonique"}
-        ]
+            {
+                "name": "Fire Ball",
+                "input": "↓↘→ + P",
+                "damage": 75,
+                "description": "Boule de feu"
+            },
+            {
+                "name": "Sonic Boom",
+                "input": "←↓↙ + P",
+                "damage": 85,
+                "description": "Onde sonique"
+            }
+        ],
+        "slug": "edouardo"
     },
     {
         "name": "ANNI-LISA",
         "style": "GRAPPLER/MIX-UP",
         "cellImage": "../Char/Anni-Lisa/cell.jpg",
         "portraitImage": "../Char/Anni-Lisa/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Anni-Lisa/sprites_generated/anni_lisa_tileset.png",
         "specialMoves": [
-            {"name": "Ice Smash", "input": "↓↘→ + P", "damage": 100, "description": "Frappe de glace"},
-            {"name": "Frost Bite", "input": "→↓↘ + K", "damage": 90, "description": "Morsure glaciale"}
-        ]
+            {
+                "name": "Ice Smash",
+                "input": "↓↘→ + P",
+                "damage": 100,
+                "description": "Frappe de glace"
+            },
+            {
+                "name": "Frost Bite",
+                "input": "→↓↘ + K",
+                "damage": 90,
+                "description": "Morsure glaciale"
+            }
+        ],
+        "slug": "anni_lisa"
     },
     {
         "name": "KAFKA",
         "style": "GUEST CHARACTER",
         "cellImage": "../Char/Kafka/cell.jpg",
         "portraitImage": "../Char/Kafka/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Kafka/sprites_generated/kafka_tileset.png",
         "specialMoves": [
-            {"name": "Monster Punch", "input": "→↓↘ + P", "damage": 130, "description": "Poing monstrueux"},
-            {"name": "Kaiju Roar", "input": "↓↙← + P", "damage": 80, "description": "Rugissement de kaiju"}
-        ]
+            {
+                "name": "Monster Punch",
+                "input": "→↓↘ + P",
+                "damage": 130,
+                "description": "Poing monstrueux"
+            },
+            {
+                "name": "Kaiju Roar",
+                "input": "↓↙← + P",
+                "damage": 80,
+                "description": "Rugissement de kaiju"
+            }
+        ],
+        "slug": "kafka"
     },
     {
         "name": "JINWOO",
         "style": "GUEST CHARACTER",
         "cellImage": "../Char/Jinwoo/cell.jpg",
         "portraitImage": "../Char/Jinwoo/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Jinwoo/sprites_generated/jinwoo_tileset.png",
         "specialMoves": [
-            {"name": "Shadow Army", "input": "↓↘→ + P", "damage": 100, "description": "Armée d'ombres"},
-            {"name": "Assassin Blade", "input": "→↓↘ + K", "damage": 120, "description": "Lame d'assassin"}
-        ]
+            {
+                "name": "Shadow Army",
+                "input": "↓↘→ + P",
+                "damage": 100,
+                "description": "Armée d'ombres"
+            },
+            {
+                "name": "Assassin Blade",
+                "input": "→↓↘ + K",
+                "damage": 120,
+                "description": "Lame d'assassin"
+            }
+        ],
+        "slug": "jinwoo"
     },
     {
         "name": "ASUKA",
         "style": "GUEST CHARACTER",
         "cellImage": "../Char/Asuka/cell.jpg",
         "portraitImage": "../Char/Asuka/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Asuka/sprites_generated/asuka_tileset.png",
         "specialMoves": [
-            {"name": "Aerial Combo", "input": "→↓↘ + P", "damage": 95, "description": "Combo aérien"},
-            {"name": "Phoenix Dive", "input": "↓↘→ + K", "damage": 110, "description": "Plongeon du phénix"}
-        ]
+            {
+                "name": "Aerial Combo",
+                "input": "→↓↘ + P",
+                "damage": 95,
+                "description": "Combo aérien"
+            },
+            {
+                "name": "Phoenix Dive",
+                "input": "↓↘→ + K",
+                "damage": 110,
+                "description": "Plongeon du phénix"
+            }
+        ],
+        "slug": "asuka"
     },
     {
         "name": "MORPHEUS",
         "style": "GUEST CHARACTER",
         "cellImage": "../Char/Morpheus/cell.jpg",
         "portraitImage": "../Char/Morpheus/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Morpheus/sprites_generated/morpheus_tileset.png",
         "specialMoves": [
-            {"name": "Matrix Dodge", "input": "↓↘→ + P", "damage": 70, "description": "Esquive matrix"},
-            {"name": "Reality Bend", "input": "↓↙← + P", "damage": 105, "description": "Distorsion réelle"}
-        ]
+            {
+                "name": "Matrix Dodge",
+                "input": "↓↘→ + P",
+                "damage": 70,
+                "description": "Esquive matrix"
+            },
+            {
+                "name": "Reality Bend",
+                "input": "↓↙← + P",
+                "damage": 105,
+                "description": "Distorsion réelle"
+            }
+        ],
+        "slug": "morpheus"
     },
     {
         "name": "BAKI",
         "style": "GUEST CHARACTER",
         "cellImage": "../Char/Baki/cell.jpg",
         "portraitImage": "../Char/Baki/portrait.jpg",
-        "tileset": "../Char/Test/assets/GrandeTileset.png",
+        "tileset": "Char/Baki/sprites_generated/baki_tileset.png",
         "specialMoves": [
-            {"name": "Demon Back", "input": "↓↙← + P", "damage": 140, "description": "Dos du démon"},
-            {"name": "Cat Fist", "input": "→↓↘ + P", "damage": 125, "description": "Poing du chat"}
-        ]
+            {
+                "name": "Demon Back",
+                "input": "↓↙← + P",
+                "damage": 140,
+                "description": "Dos du démon"
+            },
+            {
+                "name": "Cat Fist",
+                "input": "→↓↘ + P",
+                "damage": 125,
+                "description": "Poing du chat"
+            }
+        ],
+        "slug": "baki"
     }
 ]

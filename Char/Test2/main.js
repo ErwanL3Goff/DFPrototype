@@ -1,140 +1,85 @@
-// Import des classes et constantes
-import { GAME_WIDTH, GAME_HEIGHT, GROUND_LEVEL } from './js/gameConstants.js';
+// =============================================
+// main.js — point d'entrée : charge les personnages sélectionnés
+// (localStorage), précharge leurs tilesets, puis lance le Game.
+// =============================================
+import { GAME_WIDTH, GAME_HEIGHT } from './js/gameConstants.js';
+import { SpriteManager } from './js/SpriteManager.js';
+import { InputManager } from './js/InputManager.js';
 import { Game } from './js/Game.js';
 
-// Configuration initiale
-document.addEventListener('DOMContentLoaded', () => {
-    // Éléments UI
-    const loadScreen = document.getElementById('loadScreen');
-    const progressBar = document.getElementById('progressBar');
-    const startButton = document.createElement('button');
-    startButton.id = 'startButton';
-    startButton.textContent = 'COMMENCER';
-    startButton.style.display = 'none';
-    loadScreen.appendChild(startButton);
+const DEFAULT_P1 = {
+    name: 'Ike', style: 'SHOTO/BALANCE',
+    tileset: 'Char/Ike/sprites_generated/ike_tileset.png',
+    specialMoves: [{ name: 'Hadouken', input: '↓↘→ + P', damage: 70, description: 'Onde d’énergie' }]
+};
+const DEFAULT_P2 = {
+    name: 'Suzuki', style: 'MIX-UP',
+    tileset: 'Char/Suzuki/sprites_generated/suzuki_tileset.png',
+    specialMoves: [{ name: 'Shadow Strike', input: '↓↘→ + P', damage: 90, description: 'Frappe ombre' }]
+};
 
-    // Écran de chargement stylisé
-    const loadingText = document.createElement('div');
-    loadingText.textContent = 'CHARGEMENT...';
-    loadingText.style.color = 'white';
-    loadingText.style.fontFamily = 'Arial';
-    loadingText.style.fontSize = '24px';
-    loadingText.style.marginBottom = '20px';
-    loadScreen.insertBefore(loadingText, progressBar);
+// Les chemins de la sélection sont relatifs à la racine du site :
+// on les résout depuis la page courante (Char/Test2/ -> racine).
+function resolveAsset(path) {
+    const clean = path.replace(/^(\.\.\/)+/, '');
+    return new URL('../../' + clean, location.href).href;
+}
 
-    // Animation de chargement
-    let progress = 0;
-    const assetsToLoad = [
-        './assets/GrandeTileset.png',
-        // Ajouter ici tous les autres assets (sons, etc.)
-    ];
-
-    const totalAssets = assetsToLoad.length;
-    let loadedAssets = 0;
-
-    function updateProgress() {
-        progress = Math.floor((loadedAssets / totalAssets) * 100);
-        progressBar.style.width = `${progress}%`;
-        
-        if (progress >= 100) {
-            loadingText.textContent = 'PRÊT À COMBATTRE !';
-            startButton.style.display = 'block';
-        }
+function loadSelection(key, fallback) {
+    try {
+        const raw = localStorage.getItem(key);
+        if (!raw) return fallback;
+        const data = JSON.parse(raw);
+        return (data && data.name && data.tileset) ? data : fallback;
+    } catch {
+        return fallback;
     }
+}
 
-    // Préchargement des assets
-    assetsToLoad.forEach(asset => {
-        const img = new Image();
-        img.src = asset;
-        img.onload = () => {
-            loadedAssets++;
-            updateProgress();
-        };
-        img.onerror = () => {
-            console.error(`Erreur de chargement: ${asset}`);
-            loadedAssets++;
-            updateProgress();
-        };
-    });
+async function boot() {
+    const canvas = document.getElementById('gameCanvas');
+    const announceEl = document.getElementById('announce');
+    const overlayEl = document.getElementById('match-overlay');
+    const resultEl = document.getElementById('match-result');
+    const rematchBtn = document.getElementById('rematch-btn');
+    const quitBtn = document.getElementById('quit-btn');
 
-    // Initialisation du jeu quand tout est prêt
-    startButton.addEventListener('click', () => {
-        loadScreen.style.opacity = '0';
-        setTimeout(() => {
-            loadScreen.style.display = 'none';
-            
-            // Création de l'instance du jeu
-            const game = new Game();
-            
-            // Redimensionnement responsive
-            function resizeGame() {
-                const windowRatio = window.innerWidth / window.innerHeight;
-                const gameRatio = GAME_WIDTH / GAME_HEIGHT;
-                
-                if (windowRatio < gameRatio) {
-                    const scale = window.innerWidth / GAME_WIDTH;
-                    game.canvas.style.transform = `scale(${scale})`;
-                    game.uiCanvas.style.transform = `scale(${scale})`;
-                } else {
-                    const scale = window.innerHeight / GAME_HEIGHT;
-                    game.canvas.style.transform = `scale(${scale})`;
-                    game.uiCanvas.style.transform = `scale(${scale})`;
-                }
-            }
-            
-            window.addEventListener('resize', resizeGame);
-            resizeGame();
-            
-            // Démarrer le jeu
-            game.startGame();
-            
-        }, 500);
-    });
+    const p1Data = loadSelection('p1Character', DEFAULT_P1);
+    const p2Data = loadSelection('p2Character', DEFAULT_P2);
 
-    // Fallback si tout est déjà chargé
-    if (totalAssets === 0) {
-        progress = 100;
-        updateProgress();
+    // Préchargement des tilesets via SpriteManager (POO, promesses)
+    const [sm1, sm2] = await Promise.all([
+        new SpriteManager(resolveAsset(p1Data.tileset)).ready,
+        new SpriteManager(resolveAsset(p2Data.tileset)).ready
+    ]);
+
+    const input = new InputManager();
+
+    const game = new Game(
+        canvas,
+        { announceEl, overlayEl, resultEl, rematchBtn, quitBtn },
+        { ...p1Data, sprites: sm1 },
+        { ...p2Data, sprites: sm2 },
+        input
+    );
+
+    // Redimensionnement responsive
+    function resize() {
+        const scale = Math.min(window.innerWidth / GAME_WIDTH, window.innerHeight / GAME_HEIGHT);
+        const wrapper = document.getElementById('game-wrapper');
+        wrapper.style.transform = `scale(${scale})`;
     }
-});
+    window.addEventListener('resize', resize);
+    resize();
 
-// Gestion des erreurs globales
-window.addEventListener('error', (e) => {
-    const errorScreen = document.createElement('div');
-    errorScreen.style.position = 'fixed';
-    errorScreen.style.top = '0';
-    errorScreen.style.left = '0';
-    errorScreen.style.width = '100%';
-    errorScreen.style.height = '100%';
-    errorScreen.style.backgroundColor = 'rgba(0,0,0,0.9)';
-    errorScreen.style.color = 'red';
-    errorScreen.style.display = 'flex';
-    errorScreen.style.flexDirection = 'column';
-    errorScreen.style.justifyContent = 'center';
-    errorScreen.style.alignItems = 'center';
-    errorScreen.style.zIndex = '1000';
-    errorScreen.style.fontFamily = 'Arial';
-    
-    const errorTitle = document.createElement('h1');
-    errorTitle.textContent = 'ERREUR';
-    errorTitle.style.fontSize = '48px';
-    
-    const errorMsg = document.createElement('p');
-    errorMsg.textContent = e.message;
-    errorMsg.style.fontSize = '24px';
-    errorMsg.style.maxWidth = '80%';
-    errorMsg.style.textAlign = 'center';
-    
-    const errorStack = document.createElement('pre');
-    errorStack.textContent = e.error.stack;
-    errorStack.style.maxWidth = '80%';
-    errorStack.style.overflow = 'auto';
-    errorStack.style.backgroundColor = '#222';
-    errorStack.style.padding = '20px';
-    
-    errorScreen.appendChild(errorTitle);
-    errorScreen.appendChild(errorMsg);
-    errorScreen.appendChild(errorStack);
-    
-    document.body.appendChild(errorScreen);
+    game.start();
+    window.__game = game; // exposé pour debug et tests automatisés
+}
+
+boot().catch(err => {
+    console.error('Erreur au lancement du jeu :', err);
+    const div = document.createElement('div');
+    div.style.cssText = 'position:fixed;inset:0;background:#100;color:#fff;padding:40px;font-family:monospace;z-index:99';
+    div.innerHTML = `<h1>Erreur de lancement</h1><p>${err.message}</p><p style="color:#aaa">Vérifie que le jeu est servi via un serveur local (ex: python -m http.server) et non ouvert en double-cliquant sur index.html.</p>`;
+    document.body.appendChild(div);
 });
