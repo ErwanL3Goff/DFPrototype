@@ -168,14 +168,6 @@
         }
       }
       
-      // Afficher les coups spéciaux dans l'interface
-      function displaySpecialMoves(player, moves) {
-        const styleElement = player === 1 ? p1Style : p2Style;
-        if (moves && moves.length > 0) {
-          styleElement.textContent = `${styleElement.dataset.baseStyle || ''} - ${moves.join(', ')}`;
-        }
-      }
-      
       // Démarrer la musique automatiquement
       document.addEventListener('DOMContentLoaded', () => {
         // Les navigateurs modernes bloquent la lecture automatique, donc on doit gérer ça
