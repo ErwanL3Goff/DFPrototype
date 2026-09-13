@@ -69,6 +69,9 @@ export class MotionInput {
     }
 
     _match(...seq) {
+        // le motif doit être les dernières directions pressées (le neutre est
+        // filtré) : la motion doit être FINIE au moment du bouton, mais elle
+        // peut avoir été lente (buffer de 40 frames) ou tenue.
         const d = this._dirs();
         if (d.length < seq.length) return false;
         const tail = d.slice(-seq.length);

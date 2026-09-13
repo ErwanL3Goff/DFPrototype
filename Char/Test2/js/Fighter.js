@@ -6,6 +6,7 @@
 import {
     ANIM_ROWS, FRAME_COUNT, ATTACKS, MAX_HP, THROW, SPECIAL,
     GRAVITY, MAX_FALL_SPEED, MOVE_SPEED, JUMP_VELOCITY, AIR_DRIFT,
+    DOUBLE_JUMP_VELOCITY, MAX_JUMPS,
     GROUND_Y, FIGHTER_WIDTH, FIGHTER_HEIGHT, CROUCH_HEIGHT,
     SPRITE_SCALE, GUARD_CHIP, GUARD_STUN
 } from './gameConstants.js';
@@ -53,6 +54,7 @@ export class Fighter {
 
         this.frozen = 0;           // gel (Rosaline)
         this._jumpPending = 0;     // saut différé (laisse passer les 360°)
+        this.jumpsUsed = 0;        // double saut : 0 au sol, 1 après le saut, 2 max
         this.counterActive = null; // { def } pendant la fenêtre de contre
         this.invincible = 0;
         this.projectileImmune = 0;
@@ -126,7 +128,8 @@ export class Fighter {
             if (!(a && a.type === 'normal' && a.frame <= 2)) return;   // écrase un coup qui démarre
         }
         this.attack = { type: 'throw', def: THROW, variant: null,
-                        frame: 0, hasHit: false, hitsDone: 0, spawned: false };
+                        frame: 0, hasHit: false, hitsDone: 0, spawned: false,
+                        throwDir: this._backHeld() ? -1 : 1 };
         this.state = 'attack';
         this.startAnim(ANIM_ROWS.THROW, 0.9);
         this.vx = 0;
@@ -288,6 +291,7 @@ export class Fighter {
             if (this._jumpPending === 0 && this.hitstun === 0 && this.blockstun === 0) {
                 this.grounded = false;
                 this.vy = JUMP_VELOCITY;
+                this.jumpsUsed = 1;
                 this.state = 'jump';
             }
         }
@@ -298,6 +302,7 @@ export class Fighter {
             this.y += this.vy;
             if (this.y >= GROUND_Y) {
                 this.y = GROUND_Y; this.vy = 0; this.grounded = true;
+                this.jumpsUsed = 0;
                 const a = this.attack;
                 if (a && (a.def.height === 'high' || (a.type === 'special' && a.def.type === 'antiair'))) {
                     this.attack = null;   // atterrissage : les attaques aériennes s'annulent
@@ -335,11 +340,14 @@ export class Fighter {
 
             this._specialHooks(a, def);
 
+            // déplacement pendant le coup : dashes, glissades, ripostes fonceuses
+            this.x += this.vx;
+
             const total = a.type === 'throw' && !a.hasHit && a.frame > def.startup + 2
                 ? def.whiffFrames : def.frames;
             if (a.frame >= total || (a.riposte && a.frame >= 16)) {
                 this.attack = null;
-                if (this.grounded) this.state = this.isCrouching && def.height === 'low' ? 'crouch' : 'idle';
+                if (this.grounded) { this.vx = 0; this.state = this.isCrouching && def.height === 'low' ? 'crouch' : 'idle'; }
                 else this.state = 'jump';
             }
             this._advanceAnim(tick);
@@ -383,6 +391,12 @@ export class Fighter {
                 } else {
                     if (c.isDownAction(this.id, 'left')) this.vx = -AIR_DRIFT;
                     else if (c.isDownAction(this.id, 'right')) this.vx = AIR_DRIFT;
+                    // double saut : relancer la touche haut en plein vol
+                    if (c.justPressedAction(this.id, 'up') && this.jumpsUsed < MAX_JUMPS) {
+                        this.vy = DOUBLE_JUMP_VELOCITY;
+                        this.jumpsUsed++;
+                        this.state = 'jump';
+                    }
                     this.state = 'jump';
                 }
             }
@@ -396,6 +410,18 @@ export class Fighter {
 
     /** Effets propres aux coups spéciaux pendant leur exécution. */
     _specialHooks(a, def) {
+        // riposte (contre déclenché) : foncer vers l'adversaire pour frapper
+        if (a.riposte) {
+            const opp = this.opponent;
+            if (opp) {
+                const dx = opp.x - this.x;
+                const reach = ((def.counterRange || def.range) || 140) * 0.6;
+                if (Math.abs(dx) > reach && a.frame < 22) {
+                    this.vx = Math.sign(dx) * 13;
+                    this.facing = Math.sign(dx) || this.facing;
+                } else this.vx = 0;
+            }
+        }
         if (a.type !== 'special') return;
 
         // projectile(s)
@@ -418,10 +444,21 @@ export class Fighter {
             this.onProjectile?.(this, a.pendingShots, a.level);
         }
 
-        // dash (Ike, dashes, glissades, grabs fonceurs)
-        if (def.dash && a.frame >= def.startup &&
-            a.frame < def.startup + def.dash.duration) {
-            this.vx = def.dash.speed * this.facing;
+        // dash (Ike, dashes, glissades, grabs fonceurs) :
+        // fonce vers l'adversaire, s'arrête à portée puis frappe sur place
+        if (def.dash) {
+            if (a.frame >= def.startup &&
+                a.frame < def.startup + def.dash.duration) {
+                const opp = this.opponent;
+                const reach = (def.range || 100) * 0.7;
+                if (opp && Math.abs(opp.x - this.x) <= reach) {
+                    this.vx = 0;                   // à portée : on frappe sur place
+                } else {
+                    this.vx = def.dash.speed * this.facing;
+                }
+            } else if (a.frame >= def.startup + def.dash.duration && this.grounded) {
+                this.vx = 0;                       // fin du dash : arrêt net
+            }
         }
 
         // téléportation derrière l'adversaire
@@ -473,6 +510,9 @@ export class Fighter {
         if (v.feint) return null;                       // feinte d'Ike : pas de hitbox
         if (a.riposte) { range = def.counterRange || 140; startup = 4; active = 4; damage = a.damage || def.counterDamage; }
 
+        // dash : hitbox active pendant toute la course (avant le test de fenêtre)
+        if (def.dash && def.type !== 'grab') active = Math.max(active, def.dash.duration);
+
         // fenêtre active (multi-hits : fenêtres répétées)
         if (def.multi) {
             const rel = a.frame - startup;
@@ -485,9 +525,6 @@ export class Fighter {
             if (a.hasHit) return null;
         }
         if (a.type === 'throw' && a.hasHit) return null;
-
-        // dash : hitbox active pendant toute la course (casse distance / pression)
-        if (def.dash && def.type !== 'grab') active = Math.max(active, def.dash.duration);
 
         // téléportation de Duke : la hauteur dépend de la direction tenue
         if (def.directionalHeight) {
@@ -505,13 +542,16 @@ export class Fighter {
 
         const grab = a.type === 'throw' || def.type === 'grab';
         if (grab) damage = def.grabDamage || THROW.damage || damage;
+        // projection arrière : la victime vole derrière le lanceur
+        let knock = (def.knockback || THROW.knockback) * this.facing;
+        if (a.type === 'throw' && a.throwDir === -1) knock = -THROW.backKnockback * this.facing;
         return {
             x: this.facing === 1 ? this.x + 20 : this.x - range - 20,
             width: range,
             yTop, yBottom,
             height: height || 'mid',
             damage: damage || 40,
-            knockback: (def.knockback || 6) * this.facing,
+            knockback: knock,
             hitstun: def.hitstun || 16,
             grab,
             ignoreGuard: grab,

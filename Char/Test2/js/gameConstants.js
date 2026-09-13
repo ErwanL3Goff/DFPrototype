@@ -8,8 +8,8 @@
 export const GAME_WIDTH = 1280;
 export const GAME_HEIGHT = 720;
 export const GROUND_Y = 600;          // ligne du sol (pieds des personnages)
-export const GRAVITY = 0.9;
-export const MAX_FALL_SPEED = 18;
+export const GRAVITY = 0.8;
+export const MAX_FALL_SPEED = 16;
 
 // 2. CONSTANTES DES PERSONNAGES
 export const MAX_HP = 1000;
@@ -45,9 +45,11 @@ export const ANIM_ROWS = {
 export const SPRITE_SCALE = 3;        // 50px -> 150px à l'écran
 
 // 4. PHYSIQUE / COMBAT
-export const MOVE_SPEED = 5.2;
-export const JUMP_VELOCITY = -16;
-export const AIR_DRIFT = 3.6;        // contrôle horizontal en l'air
+export const MOVE_SPEED = 5.4;
+export const JUMP_VELOCITY = -19;
+export const AIR_DRIFT = 4.6;        // contrôle horizontal en l'air
+export const DOUBLE_JUMP_VELOCITY = -17;   // second saut
+export const MAX_JUMPS = 2;                 // saut + double saut
 export const FIGHTER_WIDTH = 90;     // hitbox horizontale (collision corps)
 export const FIGHTER_HEIGHT = 150;
 export const CROUCH_HEIGHT = 105;    // hitbox accroupie
@@ -58,12 +60,13 @@ export const GUARD_STUN = 12;         // frames de blockstun
 // 5. PROJECTION (les 3 boutons d'attaque en même temps)
 export const THROW = {
     damage: 110, range: 115, frames: 22, startup: 3,
-    knockback: 7, hitstun: 34, whiffFrames: 18
+    knockback: 7, hitstun: 34, whiffFrames: 18,
+    backKnockback: 9, backHitstun: 38   // projection vers l'arrière : envol plus fort
 };
 
 // 6. COUPS SPÉCIAUX
 export const SPECIAL = {
-    bufferFrames: 26,     // fenêtre de reconnaissance des motions (frames)
+    bufferFrames: 40,     // fenêtre de reconnaissance des motions (frames)
     chargeFrames: 36,     // frames de maintien pour une charge
     cancelWindow: 8,      // frames après l'impact d'un coup normal -> cancel spécial
     maxFreeze: 300        // durée max de gel (Rosaline)

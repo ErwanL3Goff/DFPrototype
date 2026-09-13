@@ -48,7 +48,7 @@ export const SPECIALS = {
           damage: 55, range: 130, height: 'high', active: 4 },
         { input: 'QCB', animRow: SP3, name: 'Contre Attaque', type: 'counter',
           frames: 22, startup: 2, animationSpeed: 0.8,
-          counterWindow: 16, counterDamage: 80, counterRange: 140 }
+          counterWindow: 22, counterDamage: 80, counterRange: 140 }
     ],
 
     // ---------------- TIM ----------------

@@ -36,6 +36,20 @@ hauteur selon la version).
 
 Appuyez sur **les trois boutons d'attaque en même temps** (1+2+3 / K+L+M)
 près de l'adversaire : la projection traverse la garde et envoie au sol.
+- Sans direction tenue : la victime est projetée **devant** (vers l'avant)
+- **Arrière tenu** : la victime est projetée **derrière** (envol plus fort)
+
+### Déplacements
+
+- Saut plus haut, et **double saut** : relancez haut en plein vol
+- Contrôle aérien renforcé
+- Les dashes spéciaux (Grande Épée de Jaytoki, glissades, charges) foncent
+  vers l'adversaire et s'arrêtent à portée de frappe
+- Les ripostes (contres de Suzuki, Jin, Anni-Lisa, Morpheus) font foncer
+  le personnage vers l'attaquant pour le punir
+- Reconnaissance des motions très permissive : buffer de 40 frames, le
+  bouton peut partir dès la diagonale (bas-avant / bas-arrière), la
+  motion peut être jouée lentement
 
 ### Combos
 
