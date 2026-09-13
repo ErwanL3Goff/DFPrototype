@@ -265,7 +265,9 @@ export class Game {
                 knockback: hb.knockback,
                 hitstun: hb.hitstun,
                 launcher: hb.launcher,
-                freeze: hb.freeze
+                freeze: hb.freeze,
+                blockstun: hb.blockstun,
+                chip: hb.chip
             });
 
             if (res === 'blocked') {

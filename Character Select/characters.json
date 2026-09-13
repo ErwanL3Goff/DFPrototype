@@ -293,21 +293,21 @@
     "tileset": "Char/Forest/sprites_generated/forest_tileset.png",
     "specialMoves": [
       {
-        "name": "Graine Explosive",
+        "name": "Avatar : Rafale de Poings",
         "input": "↓↘→ + Atk",
-        "damage": 60,
-        "description": "Coup spécial à distance"
+        "damage": 18,
+        "description": "Enchaînement multi-coups"
       },
       {
-        "name": "Balayage Racine",
+        "name": "Avatar : Grand Poing",
         "input": "↓↙← + Atk",
-        "damage": 70,
-        "description": "Fonce sur l'adversaire"
+        "damage": 80,
+        "description": "Coup spécial puissant"
       },
       {
-        "name": "Branches Montantes",
+        "name": "Rafale de Poings Anti-Air",
         "input": "→↓↘ + Atk",
-        "damage": 90,
+        "damage": 30,
         "description": "Anti-air invincible au démarrage"
       }
     ],
@@ -321,19 +321,19 @@
     "tileset": "Char/Duke Nukem/sprites_generated/duke_nukem_tileset.png",
     "specialMoves": [
       {
-        "name": "Pipe Bomb",
+        "name": "Casse-Distance : Coup dÉpée",
         "input": "↓↘→ + Atk",
-        "damage": 85,
-        "description": "Coup spécial à distance"
+        "damage": 70,
+        "description": "Coup spécial puissant — pression dans la garde"
       },
       {
-        "name": "Genou Ravageur",
+        "name": "Téléportation Éclair",
         "input": "↓↙← + Atk",
-        "damage": 80,
-        "description": "Fonce sur l'adversaire"
+        "damage": 85,
+        "description": "Téléportation — vise bas/milieu/haut selon la direction tenue"
       },
       {
-        "name": "Uppercut Brutal",
+        "name": "Épée Sautée Anti-Air",
         "input": "→↓↘ + Atk",
         "damage": 95,
         "description": "Anti-air invincible au démarrage"
@@ -463,7 +463,7 @@
       {
         "name": "Danse des Ombres",
         "input": "→↓↘ + Atk",
-        "damage": 50,
+        "damage": 40,
         "description": "Téléportation"
       }
     ],

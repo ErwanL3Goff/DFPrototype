@@ -206,24 +206,30 @@ export const SPECIALS = {
 
     // ---------------- les autres personnages : trio par défaut ----------------
     forest: [
-        { input: 'QCF', animRow: SP1, name: 'Graine Explosive',
-          ...P({ damage: 60, color: '#77dd44', size: 16 }) },
-        { input: 'QCB', animRow: SP2, name: 'Balayage Racine', type: 'dash',
-          frames: 24, startup: 6, animationSpeed: 0.8,
-          dash: { speed: 9, duration: 10 }, damage: 70, range: 100, height: 'low', active: 4 },
-        { input: 'DP', animRow: SP3, name: 'Branches Montantes', type: 'antiair',
-          frames: 26, startup: 5, animationSpeed: 0.75,
-          vy: -12, invincible: 6, damage: 90, range: 110, height: 'high', active: 5 }
+        { input: 'QCF', animRow: SP1, name: 'Avatar : Rafale de Poings', type: 'multiHit',
+          frames: 30, startup: 6, animationSpeed: 1,
+          multi: { hits: 5, interval: 3 }, damage: 18, range: 100,
+          height: 'mid', active: 2, advance: 5 },
+        { input: 'QCB', animRow: SP2, name: 'Avatar : Grand Poing', type: 'strike',
+          frames: 22, startup: 8, animationSpeed: 0.75,
+          damage: 80, range: 240, height: 'mid', active: 3 },
+        { input: 'DP', animRow: SP3, name: 'Rafale de Poings Anti-Air', type: 'antiair',
+          frames: 28, startup: 5, animationSpeed: 0.8,
+          vy: -12, invincible: 6, multi: { hits: 3, interval: 4 }, damage: 30,
+          range: 115, height: 'high', active: 4 }
     ],
     duke_nukem: [
-        { input: 'QCF', animRow: SP1, name: 'Pipe Bomb',
-          ...P({ damage: 85, size: 18, color: '#ff8844', speed: 5.5 }) },
-        { input: 'QCB', animRow: SP2, name: 'Genou Ravageur', type: 'dash',
-          frames: 24, startup: 6, animationSpeed: 0.8,
-          dash: { speed: 11, duration: 10 }, damage: 80, range: 110, height: 'mid', active: 4 },
-        { input: 'DP', animRow: SP3, name: 'Uppercut Brutal', type: 'antiair',
+        { input: 'QCF', animRow: SP1, name: 'Casse-Distance : Coup d\u00c9p\u00e9e', type: 'strike',
+          frames: 18, startup: 4, animationSpeed: 1,
+          damage: 70, range: 210, height: 'mid', active: 3,
+          guardPressure: true, blockstun: 18, chip: 0.25 },
+        { input: 'QCB', animRow: SP2, name: 'T\u00e9l\u00e9portation \u00c9clair', type: 'teleport',
+          frames: 22, startup: 5, animationSpeed: 0.9, recovery: 8,
+          hitDamage: 85, damage: 85, range: 130, active: 4,
+          directionalHeight: true },
+        { input: 'DP', animRow: SP3, name: '\u00c9p\u00e9e Saut\u00e9e Anti-Air', type: 'antiair',
           frames: 26, startup: 5, animationSpeed: 0.75,
-          vy: -13, invincible: 8, damage: 95, range: 110, height: 'high', active: 5 }
+          vy: -13, invincible: 6, damage: 95, range: 120, height: 'high', active: 5 }
     ],
     kafka: [
         { input: 'QCF', animRow: SP1, name: 'Soie Tranchante',
@@ -242,7 +248,8 @@ export const SPECIALS = {
           frames: 20, startup: 5, animationSpeed: 0.85,
           damage: 80, range: 150, height: 'mid', active: 3 },
         { input: 'DP', animRow: SP3, name: 'Danse des Ombres', type: 'teleport',
-          frames: 18, startup: 5, animationSpeed: 1, recovery: 8, hitDamage: 40 }
+          frames: 20, startup: 5, animationSpeed: 0.9, recovery: 8,
+          hitDamage: 40, damage: 40, range: 110, active: 3 }
     ],
     asuka: [
         { input: 'QCF', animRow: SP1, name: 'Onde de Ki',

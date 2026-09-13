@@ -197,7 +197,8 @@ export class Fighter {
 
     /** Retourne 'blocked' | 'hit' | 'countered' | 'invincible'. */
     takeHit(damage, { height = 'mid', knockback = 0, hitstun = 10,
-                      ignoreGuard = false, launcher = false, freeze = false } = {}) {
+                      ignoreGuard = false, launcher = false, freeze = false,
+                      blockstun = GUARD_STUN, chip = GUARD_CHIP } = {}) {
         // gel : le prochain coup brise la glace
         if (this.frozen > 0) this.frozen = 0;
 
@@ -219,10 +220,10 @@ export class Fighter {
 
         // garde
         if (!ignoreGuard && this._canBlock(height)) {
-            this.hp = Math.max(0, this.hp - Math.max(1, Math.round(damage * GUARD_CHIP)));
+            this.hp = Math.max(0, this.hp - Math.max(1, Math.round(damage * chip)));
             this.state = 'guard';
             this.guardType = this._downHeld() ? 'low' : 'high';
-            this.blockstun = GUARD_STUN;
+            this.blockstun = blockstun;
             this.attack = null;
             this.vx = Math.sign(knockback || 1) * 3;
             this.guardFlash = 14;
@@ -488,6 +489,14 @@ export class Fighter {
         // dash : hitbox active pendant toute la course (casse distance / pression)
         if (def.dash && def.type !== 'grab') active = Math.max(active, def.dash.duration);
 
+        // téléportation de Duke : la hauteur dépend de la direction tenue
+        if (def.directionalHeight) {
+            const inp = this.input;
+            if (inp.isDownAction(this.id, 'down')) height = 'low';
+            else if (inp.isDownAction(this.id, 'up')) height = 'high';
+            else height = 'mid';
+        }
+
         // hauteur du coup
         let yTop, yBottom;
         if (height === 'low') { yTop = this.y - 70; yBottom = this.y; }
@@ -508,6 +517,8 @@ export class Fighter {
             ignoreGuard: grab,
             launcher: !!def.launcher,
             freeze: !!def.projectile?.freeze,
+            blockstun: def.blockstun || GUARD_STUN,
+            chip: def.chip,
             attacker: this
         };
     }
