@@ -1,18 +1,20 @@
 // =============================================
-// SpriteManager.js — charge un tileset 4x8 (idle/walk/attack/special)
-// et gère automatiquement la version miroir (retournement).
+// SpriteManager.js — charge un tileset (16 lignes x 8 frames,
+// compatible avec les anciens 4 lignes) et gère le miroir.
 // =============================================
-import { FRAME_SIZE, FRAME_COUNT, ANIM_ROWS, SPRITE_SCALE } from './gameConstants.js';
+import { FRAME_SIZE, FRAME_COUNT, SPRITE_SCALE } from './gameConstants.js';
 
 export class SpriteManager {
     constructor(imagePath) {
         this.imagePath = imagePath;
         this.sheet = null;
         this.flipped = null;   // canvas hors-écran avec le tileset miroir
+        this.rows = 4;         // nombre de lignes détectées (4 ou 16)
         this.ready = new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => {
                 this.sheet = img;
+                this.rows = Math.max(4, Math.round(img.height / FRAME_SIZE));
                 this.flipped = this._buildFlipped(img);
                 resolve(this);
             };
@@ -38,11 +40,12 @@ export class SpriteManager {
     draw(ctx, row, frame, x, y, facing, scale = SPRITE_SCALE) {
         const src = facing === -1 ? this.flipped : this.sheet;
         const fw = this.sheet.width / FRAME_COUNT;
-        const fh = this.sheet.height / 4;
+        const fh = this.sheet.height / this.rows;
+        const r = Math.min(row, this.rows - 1);        // sécurité anciens tilesets
         const col = Math.min(frame, FRAME_COUNT - 1);
         ctx.drawImage(
             src,
-            col * fw, row * fh, fw, fh,
+            col * fw, r * fh, fw, fh,
             x - (fw * scale) / 2, y - fh * scale,  // centré, pieds sur y
             fw * scale, fh * scale
         );

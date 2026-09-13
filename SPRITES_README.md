@@ -18,27 +18,46 @@ Des tilesets d'animation ont été générés pour les personnages suivants :
 
 ---
 
-## 📐 Structure des Tilesets
+## 📐 Structure des Tilesets (format 16 lignes)
 
-Chaque tileset contient **4 lignes × 8 frames** :
+Chaque tileset contient **16 lignes x 8 frames** de 50px (400x800, fond
+transparent), d'après le modèle GrandeTileset étendu :
 
-```
-┌─────────────────────────────────────────┐
-│ Ligne 1: IDLE (repos) - 8 frames        │
-├─────────────────────────────────────────┤
-│ Ligne 2: WALK (marche) - 8 frames       │
-├─────────────────────────────────────────┤
-│ Ligne 3: ATTACK (attaque) - 8 frames    │
-├─────────────────────────────────────────┤
-│ Ligne 4: SPECIAL (coup spécial) - 8     │
-└─────────────────────────────────────────┘
-```
+| Ligne | Animation | Utilisée pour |
+|-------|-----------|---------------|
+| 1 | Pose statique (idle) | attente |
+| 2 | Marche | déplacement |
+| 3 | Saut | arc de saut (décollage/apogée/atterrissage) |
+| 4 | Accroupi | touche bas |
+| 5 | Attaque légère | touche 1 (K pour J2) |
+| 6 | Attaque moyenne | touche 2 (L pour J2) |
+| 7 | Attaque lourde / spécial | touche 3 (M pour J2) |
+| 8 | Attaque aérienne légère | saut + touche 1 |
+| 9 | Attaque aérienne moyenne | saut + touche 2 |
+| 10 | Attaque aérienne lourde | saut + touche 3 |
+| 11 | Attaque accroupie légère | bas + touche 1 |
+| 12 | Attaque accroupie moyenne | bas + touche 2 |
+| 13 | Attaque accroupie lourde | bas + touche 3 |
+| 14 | Garde haute | maintenir arrière |
+| 15 | Garde basse | maintenir arrière + bas |
+| 16 | K.O. | fin de round |
 
-- **Dimensions par frame** : 50×50 pixels
-- **Dimensions totales** : 400×200 pixels
-- **Format** : PNG avec fond blanc
+### État actuel de génération
 
----
+- **Ike** : tileset 16 lignes généré par IA (4 feuilles assemblées).
+- **19 autres personnages** : tilesets 16 lignes provisoires générés
+  automatiquement à partir des anciens sprites (transformations :
+  écrasement pour l'accroupi, rotation pour le K.O., décalage pour les
+  attaques aériennes). Les originaux 4 lignes sont sauvegardés dans
+  `*_tileset_4rows_backup.png` et seront remplacés par des versions IA.
+
+### Garde (nouvelle mécanique)
+
+Maintenir la direction opposée à l'adversaire bloque les coups :
+- garde haute bloque les coups moyens et aériens
+- garde basse (arrière + bas) bloque les coups moyens et accroupis
+- un coup bloqué ne fait subir que 15% des dégâts (chip damage)
+
 
 ## 🎮 États d'Animation
 

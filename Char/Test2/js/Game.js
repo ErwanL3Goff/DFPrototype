@@ -2,7 +2,7 @@
 // Game.js — orchestrateur : lancement de partie, mise en scène,
 // rounds (best of 3), résolution des coups, écrans d'annonce.
 // =============================================
-import { GAME_WIDTH, GROUND_Y, ROUND_TIME, WINS_NEEDED, FIGHTER_WIDTH } from './gameConstants.js';
+import { GAME_WIDTH, GROUND_Y, ROUND_TIME, WINS_NEEDED, FIGHTER_WIDTH, ANIM_ROWS } from './gameConstants.js';
 import { Fighter } from './Fighter.js';
 import { Stage } from './Stage.js';
 import { HUD } from './HUD.js';
@@ -177,15 +177,23 @@ export class Game {
             const hb = atk.getHitbox();
             if (!hb || atk.attack.hasHit) continue;
             const body = def.getBodyBox();
-            const hit = hb.x < body.x + body.width && hb.x + hb.width > body.x &&
-                        hb.attacker.y - 40 < body.y + body.height;
-            if (hit && def.state !== 'ko') {
+            const overlapX = hb.x < body.x + body.width && hb.x + hb.width > body.x;
+            const overlapY = hb.yTop < body.yBottom && hb.yBottom > body.yTop;
+            if (overlapX && overlapY && def.state !== 'ko') {
                 atk.attack.hasHit = true;
-                def.takeHit(hb.damage, hb.knockback, hb.hitstun);
-                this.shake = 8;
-                this.slowmo = 6;
-                // petit recul de l'attaquant pour la lisibilité
-                atk.vx = -2 * atk.facing;
+                const result = def.takeHit(hb.damage, {
+                    height: hb.height,
+                    knockback: hb.knockback,
+                    hitstun: hb.hitstun
+                });
+                if (result === 'blocked') {
+                    this.shake = 3;                     // bloque : petit impact sec
+                    atk.vx = -3 * atk.facing;           // l'attaquant rebondit sur la garde
+                } else {
+                    this.shake = 8;
+                    this.slowmo = 6;
+                    atk.vx = -2 * atk.facing;
+                }
             }
         }
     }
@@ -208,7 +216,7 @@ export class Game {
 
     _updateFacing() {
         for (const [f, o] of [[this.f1, this.f2], [this.f2, this.f1]]) {
-            if (!f.busy && f.grounded) f.facing = o.x >= f.x ? 1 : -1;
+            if (!f.busy && f.grounded && f.state !== 'hit') f.facing = o.x >= f.x ? 1 : -1;
         }
     }
 
@@ -227,6 +235,7 @@ export class Game {
         this.stateTimer++;
         if (this.stateTimer === 40 && this._koWinner) {
             this._koWinner.state = 'victory';
+            this._koWinner.startAnim && this._koWinner.startAnim(ANIM_ROWS.IDLE, 0.8, false);
         }
         if (this.stateTimer > 110) {
             const matchOver = this.f1.wins >= WINS_NEEDED || this.f2.wins >= WINS_NEEDED;
