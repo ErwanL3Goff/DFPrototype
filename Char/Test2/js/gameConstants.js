@@ -1,6 +1,7 @@
 // =============================================
 // CONSTANTES DU JEU - gameConstants.js
-// Tilesets 16 lignes x 8 frames de 50px (modèle GrandeTileset étendu)
+// Tilesets 20 lignes x 8 frames de 50px :
+// 16 lignes d'animations + projection + 3 coups spéciaux
 // =============================================
 
 // 1. CONSTANTES GÉNÉRALES
@@ -15,10 +16,10 @@ export const MAX_HP = 1000;
 export const ROUND_TIME = 60;         // secondes par round
 export const WINS_NEEDED = 2;         // best of 3
 
-// 3. TILESETS : 16 lignes x 8 frames de 50px
+// 3. TILESETS : 20 lignes x 8 frames de 50px
 export const FRAME_SIZE = 50;
 export const FRAME_COUNT = 8;
-export const SPRITE_ROWS = 16;
+export const SPRITE_ROWS = 20;
 export const ANIM_ROWS = {
     IDLE: 0,          // 1  pose statique
     WALK: 1,          // 2  marche
@@ -26,7 +27,7 @@ export const ANIM_ROWS = {
     CROUCH: 3,        // 4  accroupi
     LIGHT: 4,         // 5  attaque légère
     MEDIUM: 5,        // 6  attaque moyenne
-    HEAVY: 6,         // 7  attaque lourde (coup spécial du perso)
+    HEAVY: 6,         // 7  attaque lourde
     AIR_LIGHT: 7,     // 8  attaque aérienne légère
     AIR_MEDIUM: 8,    // 9  attaque aérienne moyenne
     AIR_HEAVY: 9,     // 10 attaque aérienne lourde
@@ -35,7 +36,11 @@ export const ANIM_ROWS = {
     CROUCH_HEAVY: 12, // 13 attaque accroupie lourde
     GUARD_HIGH: 13,   // 14 garde haute
     GUARD_LOW: 14,    // 15 garde basse
-    KO: 15            // 16 K.O.
+    KO: 15,           // 16 K.O.
+    THROW: 16,        // 17 projection (3 boutons d'attaque ensemble)
+    SPECIAL_1: 17,    // 18 coup spécial n°1 (bas avant + attaque)
+    SPECIAL_2: 18,    // 19 coup spécial n°2 (bas arrière + attaque)
+    SPECIAL_3: 19     // 20 coup spécial n°3 (avant bas avant, 360°, charge...)
 };
 export const SPRITE_SCALE = 3;        // 50px -> 150px à l'écran
 
@@ -49,6 +54,20 @@ export const CROUCH_HEIGHT = 105;    // hitbox accroupie
 
 export const GUARD_CHIP = 0.15;       // dégâts traversés quand on bloque
 export const GUARD_STUN = 12;         // frames de blockstun
+
+// 5. PROJECTION (les 3 boutons d'attaque en même temps)
+export const THROW = {
+    damage: 110, range: 115, frames: 22, startup: 3,
+    knockback: 7, hitstun: 34, whiffFrames: 18
+};
+
+// 6. COUPS SPÉCIAUX
+export const SPECIAL = {
+    bufferFrames: 26,     // fenêtre de reconnaissance des motions (frames)
+    chargeFrames: 36,     // frames de maintien pour une charge
+    cancelWindow: 8,      // frames après l'impact d'un coup normal -> cancel spécial
+    maxFreeze: 300        // durée max de gel (Rosaline)
+};
 
 // Attaques : height = hauteur du coup (mid/high/low)
 //   mid  : bloqué par garde haute OU basse
@@ -102,7 +121,7 @@ export const ATTACKS = {
     }
 };
 
-// 5. TOUCHES (comparées sur e.key en minuscule -> compatible AZERTY/QWERTY)
+// 7. TOUCHES (comparées sur e.key en minuscule -> compatible AZERTY/QWERTY)
 export const CONTROLS = {
     p1: { left: 'arrowleft', right: 'arrowright', up: 'arrowup', down: 'arrowdown',
           light: '1', medium: '2', special: '3' },

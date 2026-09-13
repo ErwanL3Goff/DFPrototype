@@ -20,7 +20,7 @@ Des tilesets d'animation ont été générés pour les personnages suivants :
 
 ## 📐 Structure des Tilesets (format 16 lignes)
 
-Chaque tileset contient **16 lignes x 8 frames** de 50px (400x800, fond
+Chaque tileset contient **20 lignes x 8 frames** de 50px (400x1000, fond
 transparent), d'après le modèle GrandeTileset étendu :
 
 | Ligne | Animation | Utilisée pour |
@@ -41,15 +41,20 @@ transparent), d'après le modèle GrandeTileset étendu :
 | 14 | Garde haute | maintenir arrière |
 | 15 | Garde basse | maintenir arrière + bas |
 | 16 | K.O. | fin de round |
+| 17 | Projection | les 3 boutons d'attaque en même temps |
+| 18 | Coup spécial n°1 (bas avant + attaque) | ex : lance roquette d'Ike |
+| 19 | Coup spécial n°2 (bas arrière + attaque) | ex : dash mix-up d'Ike |
+| 20 | Coup spécial n°3 (dragon punch, 360°, charge...) | ex : uppercut enflammé |
 
 ### État actuel de génération
 
-- **Ike** : tileset 16 lignes généré par IA (4 feuilles assemblées).
-- **19 autres personnages** : tilesets 16 lignes provisoires générés
-  automatiquement à partir des anciens sprites (transformations :
-  écrasement pour l'accroupi, rotation pour le K.O., décalage pour les
-  attaques aériennes). Les originaux 4 lignes sont sauvegardés dans
-  `*_tileset_4rows_backup.png` et seront remplacés par des versions IA.
+- **Ike** : lignes 1-16 générées par IA (4 feuilles assemblées).
+- **Tous les personnages** : lignes 17-20 (projection + coups spéciaux)
+  générées procéduralement (teinte élément + aura : feu, glace, foudre...)
+  en attendant la génération IA. Les backup 4 et 16 lignes sont
+  sauvegardés dans `*_tileset_4rows_backup.png` et `*_tileset_16rows_backup.png`.
+- Les coups spéciaux de chaque personnage sont définis dans
+  `Char/Test2/js/specialMoves.js` (motions, dégâts, variantes par bouton).
 
 ### Garde (nouvelle mécanique)
 

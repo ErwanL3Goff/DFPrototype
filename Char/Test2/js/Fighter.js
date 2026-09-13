@@ -1,22 +1,27 @@
 // =============================================
-// Fighter.js — un joueur. Machine à états + physique + attaques.
+// Fighter.js — un joueur. Machine à états + physique + attaques
+// + coups spéciaux (motions/charges) + projection + gel + contre.
 // États : idle, walk, jump, crouch, attack, hit, guard, ko, victory
-// Attaques : debout (légère/moyenne/lourde), aériennes, accroupies
-// Garde    : auto-garde en maintenant "arrière" (haute ou basse)
 // =============================================
 import {
-    ANIM_ROWS, FRAME_COUNT, ATTACKS, MAX_HP,
+    ANIM_ROWS, FRAME_COUNT, ATTACKS, MAX_HP, THROW, SPECIAL,
     GRAVITY, MAX_FALL_SPEED, MOVE_SPEED, JUMP_VELOCITY, AIR_DRIFT,
     GROUND_Y, FIGHTER_WIDTH, FIGHTER_HEIGHT, CROUCH_HEIGHT,
     SPRITE_SCALE, GUARD_CHIP, GUARD_STUN
 } from './gameConstants.js';
+import { matchSpecial } from './specialMoves.js';
+
+const STRENGTH = { light: 0, medium: 1, heavy: 2 };
 
 export class Fighter {
-    constructor({ id, data, spriteManager, x, facing, input }) {
-        this.id = id;                    // 'p1' | 'p2'
-        this.data = data;                // { name, style, tileset, specialMoves }
+    constructor({ id, data, spriteManager, x, facing, input, motion, onProjectile }) {
+        this.id = id;
+        this.data = data;
         this.sprites = spriteManager;
-        this.input = input;              // instance partagée d'InputManager
+        this.input = input;
+        this.motion = motion;                  // MotionInput dédié
+        this.onProjectile = onProjectile || null;   // callback Game (owner, def, level)
+        this.slug = data.slug || data.name.toLowerCase().replace(/[^a-z0-9]+/g, '_');
 
         this.name = data.name;
         this.style = data.style || '';
@@ -36,21 +41,27 @@ export class Fighter {
         this.animRow = ANIM_ROWS.IDLE;
         this.animFrame = 0;
         this.animTimer = 0;
-        this.animSpeed = 1;              // vitesse de lecture (frames / tick logique)
+        this.animSpeed = 1;
 
-        this.attack = null;              // attaque en cours { type, def, frame, hasHit, damage }
+        this.attack = null;        // attaque/special/projection en cours
         this.hitstun = 0;
         this.blockstun = 0;
-        this.guardType = null;           // 'high' | 'low' pendant la garde
-        this.flashTimer = 0;             // clignotement après un coup reçu
-        this.guardFlash = 0;             // flash bleu après un coup bloqué
-        this.hitLag = 0;                 // micro-freeze à l'impact
+        this.guardType = null;
+        this.flashTimer = 0;
+        this.guardFlash = 0;
+        this.hitLag = 0;
+
+        this.frozen = 0;           // gel (Rosaline)
+        this._jumpPending = 0;     // saut différé (laisse passer les 360°)
+        this.counterActive = null; // { def } pendant la fenêtre de contre
+        this.invincible = 0;
+        this.projectileImmune = 0;
     }
 
     get width() { return FIGHTER_WIDTH; }
     get alive() { return this.hp > 0; }
     get isCrouching() { return this.state === 'crouch' || this._downHeld(); }
-    get busy() { return this.attack !== null || this.hitstun > 0 || this.blockstun > 0 || this.state === 'ko'; }
+    get busy() { return this.attack !== null || this.hitstun > 0 || this.blockstun > 0 || this.state === 'ko' || this.frozen > 0; }
 
     startAnim(row, speed = 1, reset = true) {
         this.animRow = row;
@@ -67,13 +78,76 @@ export class Fighter {
         return this.input.isDownAction(this.id, back);
     }
 
-    // ---------- attaques ----------
+    // ---------- coups spéciaux ----------
+
+    /** Tente de déclencher un spécial via la motion en cours. */
+    trySpecial(level) {
+        this._jumpPending = 0;   // un coup annule le saut différé
+        if (this.busy) {
+            // combo cancel : pendant les frames actives d'un coup normal
+            if (this.attack && this.attack.type !== 'special' && this.attack.type !== 'throw') {
+                const a = this.attack;
+                if (a.frame < a.def.startup ||
+                    a.frame > a.def.startup + a.def.active + SPECIAL.cancelWindow) return;
+            } else return;
+        }
+        if (!this.grounded) return;
+        const m = matchSpecial(this.slug, this.motion, level);
+        if (!m) return;
+        const { def, level: lvl } = m;
+        const variant = def.variants ? def.variants[lvl] : null;
+
+        this.attack = {
+            type: 'special', def, level: lvl, variant,
+            frame: 0, hasHit: false, hitsDone: 0, spawned: false
+        };
+        this.state = 'attack';
+        this.startAnim(def.animRow, def.animationSpeed);
+        this.vx = 0;
+        this.motion.consume();
+
+        // hooks immédiats
+        if (def.type === 'counter') this.counterActive = { def, frames: def.counterWindow };
+        if (def.type === 'antiair' && def.vy) {
+            this.grounded = false;
+            this.vy = def.vy;
+        }
+        if (def.invincible) this.invincible = def.invincible;
+        if (def.projectileImmune) this.projectileImmune = def.projectileImmune;
+    }
+
+    // ---------- projection (3 boutons d'attaque en même temps) ----------
+
+    tryThrow() {
+        this._jumpPending = 0;   // un coup annule le saut différé
+        if (!this.grounded) return;
+        if (this.busy) {
+            const a = this.attack;
+            if (!(a && a.type === 'normal' && a.frame <= 2)) return;   // écrase un coup qui démarre
+        }
+        this.attack = { type: 'throw', def: THROW, variant: null,
+                        frame: 0, hasHit: false, hitsDone: 0, spawned: false };
+        this.state = 'attack';
+        this.startAnim(ANIM_ROWS.THROW, 0.9);
+        this.vx = 0;
+        this.motion.consume();
+    }
+
+    // ---------- attaques normales ----------
 
     tryAttack(type) {
-        if (this.busy) return;
+        this._jumpPending = 0;   // un coup annule le saut différé
+        if (this.busy) {
+            // target combo : cancel léger -> moyen -> lourd sur un coup normal
+            const a = this.attack;
+            if (!a || a.type !== 'normal') return;
+            const cur = STRENGTH[a.level], next = STRENGTH[type];
+            if (next <= cur) return;
+            if (a.frame < a.def.startup ||
+                a.frame > a.def.startup + a.def.active + SPECIAL.cancelWindow) return;
+        }
         const def = ATTACKS[type];
         if (!def) return;
-        // aériennes : uniquement en l'air ; au sol : interdites
         if (def.height === 'high' && this.grounded) return;
         if (def.height !== 'high' && !this.grounded) return;
 
@@ -81,42 +155,70 @@ export class Fighter {
         if (type === 'heavy' && this.specialMoves.length > 0) {
             damage = this.specialMoves[0].damage || def.damage;
         }
-        this.attack = { type, def, frame: 0, hasHit: false, damage };
+        this.attack = { type: 'normal', def, level: type, variant: null,
+                        frame: 0, hasHit: false, hitsDone: 0, spawned: false, damage };
         this.state = 'attack';
         this.startAnim(def.row, def.animationSpeed);
-        if (this.grounded) this.vx = 0;       // en l'air on garde l'élan
+        if (this.grounded) this.vx = 0;
     }
 
-    /** Bouton d'attaque pressé -> choisit la variante selon la position. */
-    _onAttackButton(kind) {                    // kind: 'light' | 'medium' | 'special'
+    /** Bouton d'attaque pressé -> priorité spécial > projection > coup normal. */
+    _onAttackButton(kind) {
+        // détection des 3 boutons ensemble -> projection
+        if (this.motion.threeAttackButtons()) { this.tryThrow(); return; }
+        // pour les coups spéciaux, le bouton '3' correspond à la version lourde
+        const lvl = kind === 'special' ? 'heavy' : kind;
+        if (this.grounded) {
+            const m = matchSpecial(this.slug, this.motion, lvl);
+            if (m) { this.trySpecial(lvl); return; }
+        }
         if (!this.grounded) {
             this.tryAttack(kind === 'special' ? 'air_heavy'
-                       : kind === 'medium' ? 'air_medium' : 'air_light');
+                : kind === 'medium' ? 'air_medium' : 'air_light');
         } else if (this.isCrouching) {
             this.tryAttack(kind === 'special' ? 'crouch_heavy'
-                       : kind === 'medium' ? 'crouch_medium' : 'crouch_light');
+                : kind === 'medium' ? 'crouch_medium' : 'crouch_light');
         } else {
             this.tryAttack(kind === 'special' ? 'heavy'
-                       : kind === 'medium' ? 'medium' : 'light');
+                : kind === 'medium' ? 'medium' : 'light');
         }
     }
 
     // ---------- réception des coups ----------
 
-    /** La garde actuelle peut-elle bloquer un coup de hauteur `height` ? */
     _canBlock(height) {
         if (!this.grounded || this.busy) return false;
         if (!this._backHeld()) return false;
         const low = this._downHeld();
-        if (height === 'low') return low;        // coups bas -> garde basse obligatoire
-        if (height === 'high') return !low;      // aériens -> garde haute obligatoire
-        return true;                              // mid -> n'importe quelle garde
+        if (height === 'low') return low;
+        if (height === 'high') return !low;
+        return true;
     }
 
-    /** Retourne 'blocked' ou 'hit'. */
-    takeHit(damage, { height = 'mid', knockback = 0, hitstun = 10 } = {}) {
-        // --- garde : coup bloqué (chip damage seulement) ---
-        if (this._canBlock(height)) {
+    /** Retourne 'blocked' | 'hit' | 'countered' | 'invincible'. */
+    takeHit(damage, { height = 'mid', knockback = 0, hitstun = 10,
+                      ignoreGuard = false, launcher = false, freeze = false } = {}) {
+        // gel : le prochain coup brise la glace
+        if (this.frozen > 0) this.frozen = 0;
+
+        // invincibilité (uppercuts invincibles)
+        if (this.invincible > 0) return 'invincible';
+
+        // contre actif : absorbe le coup et riposte
+        if (this.counterActive && this.counterActive.frames > 0) {
+            this.counterActive = null;
+            const cd = this.attack?.def;
+            const dmg = (cd && cd.counterDamage) || 60;
+            this.state = 'attack';
+            this.attack = { type: 'special', def: cd || { animRow: ANIM_ROWS.SPECIAL_3, frames: 18,
+                           animationSpeed: 1 }, variant: null, frame: 0, hasHit: false,
+                           hitsDone: 0, spawned: true, damage: dmg, riposte: true };
+            this.startAnim((cd && cd.animRow) || ANIM_ROWS.SPECIAL_3, 1);
+            return { countered: true, damage: dmg };
+        }
+
+        // garde
+        if (!ignoreGuard && this._canBlock(height)) {
             this.hp = Math.max(0, this.hp - Math.max(1, Math.round(damage * GUARD_CHIP)));
             this.state = 'guard';
             this.guardType = this._downHeld() ? 'low' : 'high';
@@ -129,26 +231,31 @@ export class Fighter {
             return 'blocked';
         }
 
-        // --- coup encaissé ---
+        // coup encaissé
         this.hp = Math.max(0, this.hp - damage);
         if (this.hp <= 0) { this._onKO(knockback); return 'hit'; }
 
         this.state = 'hit';
         this.hitstun = hitstun;
         this.attack = null;
+        this.counterActive = null;
         this.vx = Math.sign(knockback || 1) * Math.abs(knockback || 4);
+        if (launcher) { this.vy = -10; this.grounded = false; }
         this.flashTimer = 20;
         this.hitLag = 6;
+        if (freeze) this.frozen = SPECIAL.maxFreeze;
         return 'hit';
     }
 
     _onKO(knockback) {
         this.state = 'ko';
         this.attack = null;
+        this.counterActive = null;
         this.hitstun = 0;
         this.blockstun = 0;
+        this.frozen = 0;
         this.vx = Math.sign(knockback || 1) * 5;
-        this.vy = -7;                       // petit saut avant la chute
+        this.vy = -7;
         this.grounded = false;
         this.hitLag = 12;
         this.startAnim(ANIM_ROWS.KO, 0.5);
@@ -159,9 +266,11 @@ export class Fighter {
     update(tick) {
         if (this.hitLag > 0) { this.hitLag--; return; }
 
-        // --- timers ---
+        // timers
         if (this.flashTimer > 0) this.flashTimer--;
         if (this.guardFlash > 0) this.guardFlash--;
+        if (this.invincible > 0) this.invincible--;
+        if (this.projectileImmune > 0) this.projectileImmune--;
         if (this.hitstun > 0) {
             this.hitstun--;
             if (this.hitstun === 0 && this.state === 'hit') this.state = 'idle';
@@ -170,45 +279,80 @@ export class Fighter {
             this.blockstun--;
             if (this.blockstun === 0 && this.state === 'guard') this.state = 'idle';
         }
+        if (this.frozen > 0) { this.frozen--; this._advanceAnim(tick); return; }
 
-        // --- gravité ---
+        // saut différé : 3 frames pour laisser les 360° passer avant le saut
+        if (this._jumpPending > 0 && this.grounded) {
+            this._jumpPending--;
+            if (this._jumpPending === 0 && this.hitstun === 0 && this.blockstun === 0) {
+                this.grounded = false;
+                this.vy = JUMP_VELOCITY;
+                this.state = 'jump';
+            }
+        }
+
+        // gravité
         if (!this.grounded) {
             this.vy = Math.min(this.vy + GRAVITY, MAX_FALL_SPEED);
             this.y += this.vy;
             if (this.y >= GROUND_Y) {
                 this.y = GROUND_Y; this.vy = 0; this.grounded = true;
-                // atterrissage : une attaque aérienne est annulée
-                if (this.attack && this.attack.def.height === 'high') this.attack = null;
-                if (this.state !== 'ko' && this.state !== 'victory') this.state = this.busy ? 'attack' : 'idle';
+                const a = this.attack;
+                if (a && (a.def.height === 'high' || (a.type === 'special' && a.def.type === 'antiair'))) {
+                    this.attack = null;   // atterrissage : les attaques aériennes s'annulent
+                }
+                if (this.state !== 'ko' && this.state !== 'victory') {
+                    this.state = this.busy ? 'attack' : 'idle';
+                }
             }
         }
 
-        // --- attaque en cours : avancer les frames ---
+        // contre : fenêtre active
+        if (this.counterActive) {
+            this.counterActive.frames--;
+            if (this.counterActive.frames <= 0) {
+                this.counterActive = null;
+                if (this.state === 'attack') { this.attack = null; this.state = 'idle'; }
+            }
+        }
+
+        // attaque / spécial / projection en cours
         if (this.attack) {
             const a = this.attack;
+            const def = a.def;
             a.frame++;
-            if (a.frame >= a.def.frames) {
-                this.attack = null;
-                if (this.grounded) {
-                    this.state = this.isCrouching && a.def.height === 'low' ? 'crouch' : 'idle';
-                } else {
-                    this.state = 'jump';
-                }
+
+            // cancel : un bouton pressé pendant un coup normal peut le couper
+            // (combo cancel vers un spécial, target combo vers un coup plus fort)
+            if (a.type === 'normal') {
+                const c2 = this.input;
+                if (c2.justPressedAction(this.id, 'special')) this._onAttackButton('special');
+                else if (c2.justPressedAction(this.id, 'medium')) this._onAttackButton('medium');
+                else if (c2.justPressedAction(this.id, 'light')) this._onAttackButton('light');
             }
-            if (this.grounded) this.x += this.vx * 0.4;    // petite glissée au sol
-            else this.x += this.vx;                      // élan conservé en l'air
+            // (le mapping lourd est fait dans _onAttackButton)
+
+            this._specialHooks(a, def);
+
+            const total = a.type === 'throw' && !a.hasHit && a.frame > def.startup + 2
+                ? def.whiffFrames : def.frames;
+            if (a.frame >= total || (a.riposte && a.frame >= 16)) {
+                this.attack = null;
+                if (this.grounded) this.state = this.isCrouching && def.height === 'low' ? 'crouch' : 'idle';
+                else this.state = 'jump';
+            }
             this._advanceAnim(tick);
             return;
         }
 
-        // --- K.O. / victoire : plus de contrôles ---
+        // K.O. / victoire
         if (this.state === 'ko' || this.state === 'victory') {
             if (!this.grounded) this.x += this.vx;
             this._advanceAnim(tick);
             return;
         }
 
-        // --- contrôles (si pas en hitstun / blockstun) ---
+        // contrôles
         if (this.hitstun === 0 && this.blockstun === 0) {
             const c = this.input;
 
@@ -228,32 +372,71 @@ export class Fighter {
                         else this.vx = 0;
 
                         if (c.justPressedAction(this.id, 'up')) {
-                            this.grounded = false;
-                            this.vy = JUMP_VELOCITY;
-                            this.state = 'jump';
-                            // saut directionnel
+                            this._jumpPending = 3;    // 360° : le spécial passe avant le saut
                             if (moving) this.vx = Math.sign(this.vx) * AIR_DRIFT * 1.4;
+                            this.state = moving ? 'walk' : 'idle';
                         } else {
                             this.state = moving ? 'walk' : 'idle';
                         }
                     }
                 } else {
-                    // contrôle aérien
                     if (c.isDownAction(this.id, 'left')) this.vx = -AIR_DRIFT;
                     else if (c.isDownAction(this.id, 'right')) this.vx = AIR_DRIFT;
                     this.state = 'jump';
                 }
             }
         } else {
-            this.vx *= 0.85;               // friction du hitstun/blockstun
+            this.vx *= 0.85;
         }
 
         this.x += this.vx;
         this._advanceAnim(tick);
     }
 
+    /** Effets propres aux coups spéciaux pendant leur exécution. */
+    _specialHooks(a, def) {
+        if (a.type !== 'special') return;
+
+        // projectile(s)
+        if (def.type === 'projectile' && !a.spawned && a.frame >= def.startup) {
+            a.spawned = true;
+            const p = Object.assign({}, def.projectile);
+            const v = a.variant || (def.projectile.variants && def.projectile.variants[a.level]) || {};
+            if (v.speed) p.speed = v.speed;
+            if (v.damage) p.damage = v.damage;
+            if (v.height) p.height = v.height;
+            if (v.yOff !== undefined) p.yOff = v.yOff;
+            p.count = p.count || 1;
+            a.pendingShots = p;
+            a.nextShot = 0;
+        }
+        if (a.pendingShots && a.frame >= def.startup + a.nextShot &&
+            (a.shotsFired || 0) < a.pendingShots.count) {
+            a.shotsFired = (a.shotsFired || 0) + 1;
+            a.nextShot += a.pendingShots.interval;
+            this.onProjectile?.(this, a.pendingShots, a.level);
+        }
+
+        // dash (Ike, dashes, glissades, grabs fonceurs)
+        if (def.dash && a.frame >= def.startup &&
+            a.frame < def.startup + def.dash.duration) {
+            this.vx = def.dash.speed * this.facing;
+        }
+
+        // téléportation derrière l'adversaire
+        if (def.type === 'teleport' && !a.spawned && a.frame >= def.startup) {
+            a.spawned = true;
+            const opp = this.opponent;
+            if (opp) {
+                this.x = opp.x - (opp.facing === 1 ? 1 : -1) * -1 * 85;   // derrière
+                this.x = opp.x + (opp.facing === 1 ? -85 : 85);
+                this.facing = opp.x >= this.x ? 1 : -1;
+            }
+            this.vx = 0;
+        }
+    }
+
     _advanceAnim(tick) {
-        // Choisit la ligne d'animation selon l'état
         if (!this.attack) {
             switch (this.state) {
                 case 'walk':   this.startAnim(ANIM_ROWS.WALK, 1, false); break;
@@ -278,20 +461,53 @@ export class Fighter {
     getHitbox() {
         if (!this.attack) return null;
         const a = this.attack;
-        if (a.frame < a.def.startup || a.frame >= a.def.startup + a.def.active) return null;
-        const h = a.def.height;
+        const def = a.def;
+        const v = a.variant || {};
+
+        // paramètres par type de spécial
+        let range = def.range, damage = a.damage || def.damage || (v.damage), height = def.height;
+        let startup = def.startup, active = def.active || 3;
+        if (a.type === 'throw') { startup = def.startup; active = 3; }
+        if (v.range) range = v.range;
+        if (v.feint) return null;                       // feinte d'Ike : pas de hitbox
+        if (a.riposte) { range = def.counterRange || 140; startup = 4; active = 4; damage = a.damage || def.counterDamage; }
+
+        // fenêtre active (multi-hits : fenêtres répétées)
+        if (def.multi) {
+            const rel = a.frame - startup;
+            if (rel < 0 || rel >= def.multi.interval * def.multi.hits) return null;
+            if (rel % def.multi.interval >= active + 2) return null;
+            if (a.hitsDone >= def.multi.hits) return null;
+            if (a.lastHitFrame !== undefined && a.frame - a.lastHitFrame < def.multi.interval) return null;
+        } else {
+            if (a.frame < startup || a.frame >= startup + active) return null;
+            if (a.hasHit) return null;
+        }
+        if (a.type === 'throw' && a.hasHit) return null;
+
+        // dash : hitbox active pendant toute la course (casse distance / pression)
+        if (def.dash && def.type !== 'grab') active = Math.max(active, def.dash.duration);
+
+        // hauteur du coup
         let yTop, yBottom;
-        if (h === 'low') { yTop = this.y - 70; yBottom = this.y; }
-        else if (h === 'high') { yTop = this.y - 190; yBottom = this.y - 50; }
+        if (height === 'low') { yTop = this.y - 70; yBottom = this.y; }
+        else if (height === 'high') { yTop = this.y - 190; yBottom = this.y - 50; }
         else { yTop = this.y - 145; yBottom = this.y - 15; }
+
+        const grab = a.type === 'throw' || def.type === 'grab';
+        if (grab) damage = def.grabDamage || THROW.damage || damage;
         return {
-            x: this.facing === 1 ? this.x + 20 : this.x - a.def.range - 20,
-            width: a.def.range,
+            x: this.facing === 1 ? this.x + 20 : this.x - range - 20,
+            width: range,
             yTop, yBottom,
-            height: h,
-            damage: a.damage,
-            knockback: a.def.knockback * this.facing,
-            hitstun: a.def.hitstun,
+            height: height || 'mid',
+            damage: damage || 40,
+            knockback: (def.knockback || 6) * this.facing,
+            hitstun: def.hitstun || 16,
+            grab,
+            ignoreGuard: grab,
+            launcher: !!def.launcher,
+            freeze: !!def.projectile?.freeze,
             attacker: this
         };
     }
@@ -311,7 +527,7 @@ export class Fighter {
     draw(ctx) {
         const sc = SPRITE_SCALE;
 
-        // ombre au sol (rétrécit quand on est en l'air)
+        // ombre
         ctx.save();
         ctx.fillStyle = 'rgba(0,0,0,0.35)';
         const shadowW = 70, airShrink = this.grounded ? 1 : 0.6;
@@ -320,12 +536,34 @@ export class Fighter {
         ctx.fill();
         ctx.restore();
 
-        // clignotement quand touché
         if (this.flashTimer > 0 && Math.floor(this.flashTimer / 3) % 2 === 0) return;
 
         this.sprites.draw(ctx, this.animRow, this.animFrame, this.x, this.y, this.facing, sc);
 
-        // flash bleu quand un coup est bloqué
+        // gel : teinte bleutée + glaçons
+        if (this.frozen > 0) {
+            ctx.save();
+            ctx.globalAlpha = 0.4;
+            ctx.fillStyle = '#aee6ff';
+            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            ctx.restore();
+        }
+        // invincibilité : scintillement doré
+        if (this.invincible > 0) {
+            ctx.save();
+            ctx.globalAlpha = 0.25 + 0.15 * Math.sin(this.frozen + performance.now() / 60);
+            ctx.fillStyle = '#ffd700';
+            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            ctx.restore();
+        }
+        // contre actif : aura verte
+        if (this.counterActive) {
+            ctx.save();
+            ctx.globalAlpha = 0.3;
+            ctx.fillStyle = '#66ff88';
+            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            ctx.restore();
+        }
         if (this.guardFlash > 0) {
             ctx.save();
             ctx.globalAlpha = this.guardFlash / 28;
@@ -333,8 +571,6 @@ export class Fighter {
             ctx.fillRect(this.x - 75, this.y - 160, 150, 160);
             ctx.restore();
         }
-
-        // surbrillance rouge quand K.O.
         if (this.state === 'ko') {
             ctx.save();
             ctx.globalAlpha = 0.25;

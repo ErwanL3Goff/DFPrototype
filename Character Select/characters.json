@@ -1,448 +1,556 @@
 [
-    {
-        "name": "JAYTOKI",
-        "style": "ZONER",
-        "cellImage": "../Char/Jaytoki/cell.jpg",
-        "portraitImage": "../Char/Jaytoki/portrait.jpg",
-        "tileset": "Char/Jaytoki/sprites_generated/jaytoki_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Clint Eastwood",
-                "input": "↓↘→ + P",
-                "damage": 80,
-                "description": "Projectile rapide"
-            },
-            {
-                "name": "Cassandra Tornado",
-                "input": "↓↙← + K",
-                "damage": 100,
-                "description": "Attaque tournoyante"
-            }
-        ],
-        "slug": "jaytoki"
-    },
-    {
-        "name": "SUZUKI",
-        "style": "MIX-UP",
-        "cellImage": "../Char/Suzuki/cell.jpg",
-        "portraitImage": "../Char/Suzuki/portrait.jpg",
-        "tileset": "Char/Suzuki/sprites_generated/suzuki_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Shadow Strike",
-                "input": "↓↘→ + P",
-                "damage": 90,
-                "description": "Frappe ombre rapide"
-            },
-            {
-                "name": "Wind Blade",
-                "input": "→↓↘ + K",
-                "damage": 110,
-                "description": "Lame de vent tranchante"
-            }
-        ],
-        "slug": "suzuki"
-    },
-    {
-        "name": "TIM",
-        "style": "GRAPPLER/SETUP",
-        "cellImage": "../Char/Tim/cell.jpg",
-        "portraitImage": "../Char/Tim/portrait.jpg",
-        "tileset": "Char/Tim/sprites_generated/tim_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Power Slam",
-                "input": "360° + P",
-                "damage": 150,
-                "description": "Projection puissante"
-            },
-            {
-                "name": "Earth Crusher",
-                "input": "↓↙← + P",
-                "damage": 120,
-                "description": "Frappe terrestre"
-            }
-        ],
-        "slug": "tim"
-    },
-    {
-        "name": "IKE",
-        "style": "SHOTO/BALANCE",
-        "cellImage": "../Char/Ike/cell.jpg",
-        "portraitImage": "../Char/Ike/portrait.jpg",
-        "tileset": "Char/Ike/sprites_generated/ike_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Hadouken",
-                "input": "↓↘→ + P",
-                "damage": 70,
-                "description": "Onde d'énergie projectile"
-            },
-            {
-                "name": "Shoryuken",
-                "input": "→↓↘ + P",
-                "damage": 100,
-                "description": "Uppercut dragon"
-            },
-            {
-                "name": "Tatsumaki",
-                "input": "↓↙← + K",
-                "damage": 90,
-                "description": "Tempête tournoyante"
-            }
-        ],
-        "slug": "ike"
-    },
-    {
-        "name": "JIN",
-        "style": "SHOTO/COMBO",
-        "cellImage": "../Char/Jin/cell.jpg",
-        "portraitImage": "../Char/Jin/portrait.jpg",
-        "tileset": "Char/Jin/sprites_generated/jin_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Orochi Slash",
-                "input": "↓↘→ + P",
-                "damage": 95,
-                "description": "Coupe démoniaque"
-            },
-            {
-                "name": "Flame Punch",
-                "input": "→↓↘ + P",
-                "damage": 105,
-                "description": "Poing enflammé"
-            }
-        ],
-        "slug": "jin"
-    },
-    {
-        "name": "KIMIKO",
-        "style": "RUSHDOWN/SETUP",
-        "cellImage": "../Char/Kimiko/cell.jpg",
-        "portraitImage": "../Char/Kimiko/portrait.jpg",
-        "tileset": "Char/Kimiko/sprites_generated/kimiko_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Shadow Clone",
-                "input": "↓↘→ + P",
-                "damage": 60,
-                "description": "Crée un clone d'ombre"
-            },
-            {
-                "name": "Lightning Strike",
-                "input": "→↓↘ + K",
-                "damage": 115,
-                "description": "Frappe de foudre"
-            }
-        ],
-        "slug": "kimiko"
-    },
-    {
-        "name": "ROBERT",
-        "style": "GRAPPLER",
-        "cellImage": "../Char/Robert/cell.jpg",
-        "portraitImage": "../Char/Robert/portrait.jpg",
-        "tileset": "Char/Robert/sprites_generated/robert_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Power Bomb",
-                "input": "360° + P",
-                "damage": 160,
-                "description": "Bombe puissante"
-            },
-            {
-                "name": "Suplex",
-                "input": "↓↙← + P",
-                "damage": 140,
-                "description": "Projection classique"
-            }
-        ],
-        "slug": "robert"
-    },
-    {
-        "name": "ROSALINE",
-        "style": "ZONER/TRAP",
-        "cellImage": "../Char/Rosaline/cell.jpg",
-        "portraitImage": "../Char/Rosaline/portrait.jpg",
-        "tileset": "Char/Rosaline/sprites_generated/rosaline_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Magic Trap",
-                "input": "↓↘→ + P",
-                "damage": 75,
-                "description": "Piège magique"
-            },
-            {
-                "name": "Energy Beam",
-                "input": "↓↙← + P",
-                "damage": 95,
-                "description": "Rayon d'énergie"
-            }
-        ],
-        "slug": "rosaline"
-    },
-    {
-        "name": "JANE",
-        "style": "SHOTO/RUSHDOWN",
-        "cellImage": "../Char/Jane/cell.jpg",
-        "portraitImage": "../Char/Jane/portrait.jpg",
-        "tileset": "Char/Jane/sprites_generated/jane_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Dragon Kick",
-                "input": "↓↘→ + K",
-                "damage": 100,
-                "description": "Kick du dragon"
-            },
-            {
-                "name": "Tiger Uppercut",
-                "input": "→↓↘ + P",
-                "damage": 110,
-                "description": "Uppercut du tigre"
-            }
-        ],
-        "slug": "jane"
-    },
-    {
-        "name": "EVA",
-        "style": "MIX-UP",
-        "cellImage": "../Char/Eva/cell.jpg",
-        "portraitImage": "../Char/Eva/portrait.jpg",
-        "tileset": "Char/Eva/sprites_generated/eva_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Teleport Punch",
-                "input": "→↓↘ + P",
-                "damage": 85,
-                "description": "Téléportation et frappe"
-            },
-            {
-                "name": "Mind Blast",
-                "input": "↓↘→ + P",
-                "damage": 90,
-                "description": "Explosion mentale"
-            }
-        ],
-        "slug": "eva"
-    },
-    {
-        "name": "FOREST",
-        "style": "ZONER/MIX-UP",
-        "cellImage": "../Char/Forest/cell.jpg",
-        "portraitImage": "../Char/Forest/portrait.jpg",
-        "tileset": "Char/Forest/sprites_generated/forest_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Vine Whip",
-                "input": "↓↘→ + P",
-                "damage": 80,
-                "description": "Fouet de liane"
-            },
-            {
-                "name": "Nature's Wrath",
-                "input": "↓↙← + P",
-                "damage": 105,
-                "description": "Colère de la nature"
-            }
-        ],
-        "slug": "forest"
-    },
-    {
-        "name": "DUKE NUKEM",
-        "style": "ZONER/MIX-UP",
-        "cellImage": "../Char/Duke Nukem/cell.jpg",
-        "portraitImage": "../Char/Duke Nukem/portrait.jpg",
-        "tileset": "Char/Duke Nukem/sprites_generated/duke_nukem_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Rocket Launcher",
-                "input": "↓↘→ + P",
-                "damage": 120,
-                "description": "Lance-roquettes"
-            },
-            {
-                "name": "Shrink Ray",
-                "input": "↓↙← + P",
-                "damage": 70,
-                "description": "Rayon rétracteur"
-            }
-        ],
-        "slug": "duke_nukem"
-    },
-    {
-        "name": "PRISCILLA",
-        "style": "ZONER/MIX-UP",
-        "cellImage": "../Char/Priscilla/cell.jpg",
-        "portraitImage": "../Char/Priscilla/portrait.jpg",
-        "tileset": "Char/Priscilla/sprites_generated/priscilla_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Dark Slash",
-                "input": "↓↘→ + P",
-                "damage": 95,
-                "description": "Coupe sombre"
-            },
-            {
-                "name": "Blood Moon",
-                "input": "↓↙← + P",
-                "damage": 115,
-                "description": "Lune de sang"
-            }
-        ],
-        "slug": "priscilla"
-    },
-    {
-        "name": "EDOUARDO",
-        "style": "ZONER/RUSHDOWN",
-        "cellImage": "../Char/Edouardo/cell.jpg",
-        "portraitImage": "../Char/Edouardo/portrait.jpg",
-        "tileset": "Char/Edouardo/sprites_generated/edouardo_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Fire Ball",
-                "input": "↓↘→ + P",
-                "damage": 75,
-                "description": "Boule de feu"
-            },
-            {
-                "name": "Sonic Boom",
-                "input": "←↓↙ + P",
-                "damage": 85,
-                "description": "Onde sonique"
-            }
-        ],
-        "slug": "edouardo"
-    },
-    {
-        "name": "ANNI-LISA",
-        "style": "GRAPPLER/MIX-UP",
-        "cellImage": "../Char/Anni-Lisa/cell.jpg",
-        "portraitImage": "../Char/Anni-Lisa/portrait.jpg",
-        "tileset": "Char/Anni-Lisa/sprites_generated/anni_lisa_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Ice Smash",
-                "input": "↓↘→ + P",
-                "damage": 100,
-                "description": "Frappe de glace"
-            },
-            {
-                "name": "Frost Bite",
-                "input": "→↓↘ + K",
-                "damage": 90,
-                "description": "Morsure glaciale"
-            }
-        ],
-        "slug": "anni_lisa"
-    },
-    {
-        "name": "KAFKA",
-        "style": "GUEST CHARACTER",
-        "cellImage": "../Char/Kafka/cell.jpg",
-        "portraitImage": "../Char/Kafka/portrait.jpg",
-        "tileset": "Char/Kafka/sprites_generated/kafka_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Monster Punch",
-                "input": "→↓↘ + P",
-                "damage": 130,
-                "description": "Poing monstrueux"
-            },
-            {
-                "name": "Kaiju Roar",
-                "input": "↓↙← + P",
-                "damage": 80,
-                "description": "Rugissement de kaiju"
-            }
-        ],
-        "slug": "kafka"
-    },
-    {
-        "name": "JINWOO",
-        "style": "GUEST CHARACTER",
-        "cellImage": "../Char/Jinwoo/cell.jpg",
-        "portraitImage": "../Char/Jinwoo/portrait.jpg",
-        "tileset": "Char/Jinwoo/sprites_generated/jinwoo_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Shadow Army",
-                "input": "↓↘→ + P",
-                "damage": 100,
-                "description": "Armée d'ombres"
-            },
-            {
-                "name": "Assassin Blade",
-                "input": "→↓↘ + K",
-                "damage": 120,
-                "description": "Lame d'assassin"
-            }
-        ],
-        "slug": "jinwoo"
-    },
-    {
-        "name": "ASUKA",
-        "style": "GUEST CHARACTER",
-        "cellImage": "../Char/Asuka/cell.jpg",
-        "portraitImage": "../Char/Asuka/portrait.jpg",
-        "tileset": "Char/Asuka/sprites_generated/asuka_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Aerial Combo",
-                "input": "→↓↘ + P",
-                "damage": 95,
-                "description": "Combo aérien"
-            },
-            {
-                "name": "Phoenix Dive",
-                "input": "↓↘→ + K",
-                "damage": 110,
-                "description": "Plongeon du phénix"
-            }
-        ],
-        "slug": "asuka"
-    },
-    {
-        "name": "MORPHEUS",
-        "style": "GUEST CHARACTER",
-        "cellImage": "../Char/Morpheus/cell.jpg",
-        "portraitImage": "../Char/Morpheus/portrait.jpg",
-        "tileset": "Char/Morpheus/sprites_generated/morpheus_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Matrix Dodge",
-                "input": "↓↘→ + P",
-                "damage": 70,
-                "description": "Esquive matrix"
-            },
-            {
-                "name": "Reality Bend",
-                "input": "↓↙← + P",
-                "damage": 105,
-                "description": "Distorsion réelle"
-            }
-        ],
-        "slug": "morpheus"
-    },
-    {
-        "name": "BAKI",
-        "style": "GUEST CHARACTER",
-        "cellImage": "../Char/Baki/cell.jpg",
-        "portraitImage": "../Char/Baki/portrait.jpg",
-        "tileset": "Char/Baki/sprites_generated/baki_tileset.png",
-        "specialMoves": [
-            {
-                "name": "Demon Back",
-                "input": "↓↙← + P",
-                "damage": 140,
-                "description": "Dos du démon"
-            },
-            {
-                "name": "Cat Fist",
-                "input": "→↓↘ + P",
-                "damage": 125,
-                "description": "Poing du chat"
-            }
-        ],
-        "slug": "baki"
-    }
+  {
+    "name": "JAYTOKI",
+    "style": "ZONER",
+    "cellImage": "../Char/Jaytoki/cell.jpg",
+    "portraitImage": "../Char/Jaytoki/portrait.jpg",
+    "tileset": "Char/Jaytoki/sprites_generated/jaytoki_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Grande Épée de Lumière",
+        "input": "↓↘→ + Atk",
+        "damage": 85,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Coups de Feu Pistolet",
+        "input": "↓↙← + Atk",
+        "damage": 60,
+        "description": "Coup spécial à distance"
+      }
+    ],
+    "slug": "jaytoki"
+  },
+  {
+    "name": "SUZUKI",
+    "style": "MIX-UP",
+    "cellImage": "../Char/Suzuki/cell.jpg",
+    "portraitImage": "../Char/Suzuki/portrait.jpg",
+    "tileset": "Char/Suzuki/sprites_generated/suzuki_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Slash Katana",
+        "input": "↓↘→ + Atk",
+        "damage": 90,
+        "description": "Coup spécial puissant — varie selon le niveau d'attaque (léger/moyen/lourd)"
+      },
+      {
+        "name": "Frappe Circulaire Anti-Air",
+        "input": "360° + Atk",
+        "damage": 55,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Contre Attaque",
+        "input": "↓↙← + Atk",
+        "damage": 80,
+        "description": "Absorbe le coup et riposte"
+      }
+    ],
+    "slug": "suzuki"
+  },
+  {
+    "name": "TIM",
+    "style": "GRAPPLER/SETUP",
+    "cellImage": "../Char/Tim/cell.jpg",
+    "portraitImage": "../Char/Tim/portrait.jpg",
+    "tileset": "Char/Tim/sprites_generated/tim_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Boule de Feu",
+        "input": "↓↘→ + Atk",
+        "damage": 60,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Coup de Pied Tornade",
+        "input": "↓↙← + Atk",
+        "damage": 45,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Uppercut Sauté",
+        "input": "→↓↘ + Atk",
+        "damage": 90,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Rafale de Poings",
+        "input": "→←→ + Atk",
+        "damage": 100,
+        "description": "Projection qui traverse la garde"
+      }
+    ],
+    "slug": "tim"
+  },
+  {
+    "name": "IKE",
+    "style": "SHOTO/BALANCE",
+    "cellImage": "../Char/Ike/cell.jpg",
+    "portraitImage": "../Char/Ike/portrait.jpg",
+    "tileset": "Char/Ike/sprites_generated/ike_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Lance Roquette",
+        "input": "↓↘→ + Atk",
+        "damage": 90,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Dash Mix-Up",
+        "input": "↓↙← + Atk",
+        "damage": 85,
+        "description": "Fonce sur l'adversaire — varie selon le niveau d'attaque (léger/moyen/lourd)"
+      },
+      {
+        "name": "Uppercut Enflammé",
+        "input": "→↓↘ + Atk",
+        "damage": 100,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "ike"
+  },
+  {
+    "name": "JIN",
+    "style": "SHOTO/COMBO",
+    "cellImage": "../Char/Jin/cell.jpg",
+    "portraitImage": "../Char/Jin/portrait.jpg",
+    "tileset": "Char/Jin/sprites_generated/jin_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Poing Crochet",
+        "input": "→↓↘ + Atk",
+        "damage": 85,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Double Pied Anti-Air",
+        "input": "↓↙← + Atk",
+        "damage": 50,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Poing Riposte",
+        "input": "←↓↘ + Atk",
+        "damage": 75,
+        "description": "Absorbe le coup et riposte"
+      }
+    ],
+    "slug": "jin"
+  },
+  {
+    "name": "KIMIKO",
+    "style": "RUSHDOWN/SETUP",
+    "cellImage": "../Char/Kimiko/cell.jpg",
+    "portraitImage": "../Char/Kimiko/portrait.jpg",
+    "tileset": "Char/Kimiko/sprites_generated/kimiko_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Lancé de Tornade",
+        "input": "↓↘→ + Atk",
+        "damage": 65,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Coup de Pied Tornade",
+        "input": "↓↙← + Atk",
+        "damage": 40,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Tornade Sautée Anti-Air",
+        "input": "→↓↘ + Atk",
+        "damage": 50,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "kimiko"
+  },
+  {
+    "name": "ROBERT",
+    "style": "GRAPPLER",
+    "cellImage": "../Char/Robert/cell.jpg",
+    "portraitImage": "../Char/Robert/portrait.jpg",
+    "tileset": "Char/Robert/sprites_generated/robert_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Coup de Poing Puissant",
+        "input": "← (charge) → + Atk",
+        "damage": 90,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Coup de Tête Sauté",
+        "input": "↓ (charge) ↑ + Atk",
+        "damage": 95,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Command Grab",
+        "input": "360° + Atk",
+        "damage": 110,
+        "description": "Projection qui traverse la garde"
+      }
+    ],
+    "slug": "robert"
+  },
+  {
+    "name": "ROSALINE",
+    "style": "ZONER/TRAP",
+    "cellImage": "../Char/Rosaline/cell.jpg",
+    "portraitImage": "../Char/Rosaline/portrait.jpg",
+    "tileset": "Char/Rosaline/sprites_generated/rosaline_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Projectile Glace",
+        "input": "↓↘→ + Atk",
+        "damage": 50,
+        "description": "Coup spécial à distance — gèle l'adversaire non gardé"
+      },
+      {
+        "name": "Glissade Basse",
+        "input": "←→ + Atk",
+        "damage": 70,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Clone de Glace",
+        "input": "↓↓↓ + Atk",
+        "damage": 55,
+        "description": "Coup spécial à distance — gèle l'adversaire non gardé"
+      }
+    ],
+    "slug": "rosaline"
+  },
+  {
+    "name": "JANE",
+    "style": "SHOTO/RUSHDOWN",
+    "cellImage": "../Char/Jane/cell.jpg",
+    "portraitImage": "../Char/Jane/portrait.jpg",
+    "tileset": "Char/Jane/sprites_generated/jane_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Main Électrique",
+        "input": "↓↘→ + Atk",
+        "damage": 100,
+        "description": "Projection qui traverse la garde"
+      },
+      {
+        "name": "Rafale de Pieds Électriques",
+        "input": "↓↙← + Atk",
+        "damage": 22,
+        "description": "Enchaînement multi-coups"
+      },
+      {
+        "name": "Épée Électrique Furtive",
+        "input": "→↓↘ + Atk",
+        "damage": 80,
+        "description": "Coup spécial puissant"
+      }
+    ],
+    "slug": "jane"
+  },
+  {
+    "name": "EVA",
+    "style": "MIX-UP",
+    "cellImage": "../Char/Eva/cell.jpg",
+    "portraitImage": "../Char/Eva/portrait.jpg",
+    "tileset": "Char/Eva/sprites_generated/eva_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Multi Coup de Pied",
+        "input": "↓↙← + Atk",
+        "damage": 20,
+        "description": "Enchaînement multi-coups"
+      },
+      {
+        "name": "Vague Sonic",
+        "input": "↓↘→ + Atk",
+        "damage": 65,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Uppercut Sauté 3 Coups",
+        "input": "→↓↘ + Atk",
+        "damage": 30,
+        "description": "Anti-air invincible au démarrage"
+      },
+      {
+        "name": "Command Grab",
+        "input": "360° + Atk",
+        "damage": 105,
+        "description": "Projection qui traverse la garde"
+      }
+    ],
+    "slug": "eva"
+  },
+  {
+    "name": "FOREST",
+    "style": "ZONER/MIX-UP",
+    "cellImage": "../Char/Forest/cell.jpg",
+    "portraitImage": "../Char/Forest/portrait.jpg",
+    "tileset": "Char/Forest/sprites_generated/forest_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Graine Explosive",
+        "input": "↓↘→ + Atk",
+        "damage": 60,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Balayage Racine",
+        "input": "↓↙← + Atk",
+        "damage": 70,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Branches Montantes",
+        "input": "→↓↘ + Atk",
+        "damage": 90,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "forest"
+  },
+  {
+    "name": "DUKE NUKEM",
+    "style": "ZONER/MIX-UP",
+    "cellImage": "../Char/Duke Nukem/cell.jpg",
+    "portraitImage": "../Char/Duke Nukem/portrait.jpg",
+    "tileset": "Char/Duke Nukem/sprites_generated/duke_nukem_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Pipe Bomb",
+        "input": "↓↘→ + Atk",
+        "damage": 85,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Genou Ravageur",
+        "input": "↓↙← + Atk",
+        "damage": 80,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Uppercut Brutal",
+        "input": "→↓↘ + Atk",
+        "damage": 95,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "duke_nukem"
+  },
+  {
+    "name": "PRISCILLA",
+    "style": "ZONER/MIX-UP",
+    "cellImage": "../Char/Priscilla/cell.jpg",
+    "portraitImage": "../Char/Priscilla/portrait.jpg",
+    "tileset": "Char/Priscilla/sprites_generated/priscilla_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Fusil Mitrailleur",
+        "input": "↓↘→ + Atk",
+        "damage": 14,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Double Pistolet Anti-Air",
+        "input": "↓↙← + Atk",
+        "damage": 22,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Téléportation",
+        "input": "→↓↘ + Atk",
+        "damage": 50,
+        "description": "Téléportation"
+      }
+    ],
+    "slug": "priscilla"
+  },
+  {
+    "name": "EDOUARDO",
+    "style": "ZONER/RUSHDOWN",
+    "cellImage": "../Char/Edouardo/cell.jpg",
+    "portraitImage": "../Char/Edouardo/portrait.jpg",
+    "tileset": "Char/Edouardo/sprites_generated/edouardo_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Coup de Feu Revolver",
+        "input": "↓↘→ + Atk",
+        "damage": 45,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Riposte Overhead",
+        "input": "↓↙← + Atk",
+        "damage": 95,
+        "description": "Anti-air invincible au démarrage (attaque heavy seulement)"
+      },
+      {
+        "name": "Uppercut Invincible",
+        "input": "→↓↘ + Atk",
+        "damage": 105,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "edouardo"
+  },
+  {
+    "name": "ANNI-LISA",
+    "style": "GRAPPLER/MIX-UP",
+    "cellImage": "../Char/Anni-Lisa/cell.jpg",
+    "portraitImage": "../Char/Anni-Lisa/portrait.jpg",
+    "tileset": "Char/Anni-Lisa/sprites_generated/anni_lisa_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Esquive Contre",
+        "input": "↓↙← + Atk",
+        "damage": 85,
+        "description": "Absorbe le coup et riposte"
+      }
+    ],
+    "slug": "anni_lisa"
+  },
+  {
+    "name": "KAFKA",
+    "style": "GUEST CHARACTER",
+    "cellImage": "../Char/Kafka/cell.jpg",
+    "portraitImage": "../Char/Kafka/portrait.jpg",
+    "tileset": "Char/Kafka/sprites_generated/kafka_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Soie Tranchante",
+        "input": "↓↘→ + Atk",
+        "damage": 55,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Pirouette",
+        "input": "↓↙← + Atk",
+        "damage": 28,
+        "description": "Enchaînement multi-coups"
+      },
+      {
+        "name": "Élévation Gravitationnelle",
+        "input": "→↓↘ + Atk",
+        "damage": 90,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "kafka"
+  },
+  {
+    "name": "JINWOO",
+    "style": "GUEST CHARACTER",
+    "cellImage": "../Char/Jinwoo/cell.jpg",
+    "portraitImage": "../Char/Jinwoo/portrait.jpg",
+    "tileset": "Char/Jinwoo/sprites_generated/jinwoo_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Lames d’Ombre",
+        "input": "↓↘→ + Atk",
+        "damage": 25,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Entaille Sombre",
+        "input": "↓↙← + Atk",
+        "damage": 80,
+        "description": "Coup spécial puissant"
+      },
+      {
+        "name": "Danse des Ombres",
+        "input": "→↓↘ + Atk",
+        "damage": 50,
+        "description": "Téléportation"
+      }
+    ],
+    "slug": "jinwoo"
+  },
+  {
+    "name": "ASUKA",
+    "style": "GUEST CHARACTER",
+    "cellImage": "../Char/Asuka/cell.jpg",
+    "portraitImage": "../Char/Asuka/portrait.jpg",
+    "tileset": "Char/Asuka/sprites_generated/asuka_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Onde de Ki",
+        "input": "↓↘→ + Atk",
+        "damage": 60,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Mawashi Geri",
+        "input": "↓↙← + Atk",
+        "damage": 75,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Rising Dragon",
+        "input": "→↓↘ + Atk",
+        "damage": 95,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "asuka"
+  },
+  {
+    "name": "MORPHEUS",
+    "style": "GUEST CHARACTER",
+    "cellImage": "../Char/Morpheus/cell.jpg",
+    "portraitImage": "../Char/Morpheus/portrait.jpg",
+    "tileset": "Char/Morpheus/sprites_generated/morpheus_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Distorsion",
+        "input": "↓↘→ + Atk",
+        "damage": 55,
+        "description": "Coup spécial à distance"
+      },
+      {
+        "name": "Esquive du Néant",
+        "input": "↓↙← + Atk",
+        "damage": 80,
+        "description": "Absorbe le coup et riposte"
+      },
+      {
+        "name": "Ascension",
+        "input": "→↓↘ + Atk",
+        "damage": 90,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "morpheus"
+  },
+  {
+    "name": "BAKI",
+    "style": "GUEST CHARACTER",
+    "cellImage": "../Char/Baki/cell.jpg",
+    "portraitImage": "../Char/Baki/portrait.jpg",
+    "tileset": "Char/Baki/sprites_generated/baki_tileset.png",
+    "specialMoves": [
+      {
+        "name": "Dash Poing Tranchant",
+        "input": "↓↘→ + Atk",
+        "damage": 80,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Balayage Sol",
+        "input": "↓↙← + Atk",
+        "damage": 70,
+        "description": "Fonce sur l'adversaire"
+      },
+      {
+        "name": "Cobra Uppercut",
+        "input": "→↓↘ + Atk",
+        "damage": 95,
+        "description": "Anti-air invincible au démarrage"
+      }
+    ],
+    "slug": "baki"
+  }
 ]
