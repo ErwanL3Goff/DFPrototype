@@ -578,7 +578,7 @@ export class Fighter {
     draw(ctx) {
         const sc = SPRITE_SCALE;
 
-        // ombre
+        // Ombre dynamique projetée au sol
         ctx.save();
         ctx.fillStyle = 'rgba(0,0,0,0.35)';
         const shadowW = 70, airShrink = this.grounded ? 1 : 0.6;
@@ -589,32 +589,167 @@ export class Fighter {
 
         if (this.flashTimer > 0 && Math.floor(this.flashTimer / 3) % 2 === 0) return;
 
-        this.sprites.draw(ctx, this.animRow, this.animFrame, this.x, this.y, this.facing, sc);
+        // Calcul des effets de style animé basés sur l'état du personnage
+        const animOptions = this._getAnimatedStyleOptions();
+        
+        // Dessin du sprite avec le nouveau système d'animation amélioré
+        this.sprites.draw(ctx, this.animRow, this.animFrame, this.x, this.y, this.facing, sc, animOptions);
 
-        // gel : teinte bleutée + glaçons
+        // Effets spéciaux post-rendu (gel, invincibilité, contre, etc.)
+        this._drawSpecialEffects(ctx);
+    }
+
+    /** Retourne les options de style animé selon l'état actuel */
+    _getAnimatedStyleOptions() {
+        const options = {
+            squash: 1.0,
+            stretch: 1.0,
+            rotation: 0,
+            glowColor: null,
+            glowIntensity: 0,
+            flashColor: null,
+            flashIntensity: 0,
+            opacity: 1.0,
+            motionBlur: 0,
+            colorTint: null
+        };
+
+        // Squash & stretch basé sur la vitesse verticale (saut/atterrissage)
+        if (!this.grounded) {
+            const speed = Math.abs(this.vy);
+            if (this.vy < 0) {
+                // En montant : étirement vertical
+                options.stretch = 1 + Math.min(speed * 0.02, 0.15);
+                options.squash = 1 - Math.min(speed * 0.015, 0.1);
+            } else {
+                // En descendant : léger étirement
+                options.stretch = 1 + Math.min(speed * 0.015, 0.1);
+                options.squash = 1 - Math.min(speed * 0.01, 0.05);
+            }
+        }
+
+        // Compression à l'atterrissage
+        if (this.grounded && this.vy === 0 && this.state === 'idle' && this.hitstun === 0) {
+            // Respiration légère en idle
+            const breath = Math.sin(performance.now() / 200) * 0.03;
+            options.squash = 1 + breath;
+            options.stretch = 1 - breath * 0.5;
+        }
+
+        // Motion blur pendant les déplacements rapides
+        if (Math.abs(this.vx) > MOVE_SPEED * 0.8) {
+            options.motionBlur = Math.abs(this.vx) / MOVE_SPEED * 0.4;
+        }
+
+        // Effet de flash quand touché
+        if (this.flashTimer > 0) {
+            options.flashColor = '#ffffff';
+            options.flashIntensity = Math.min(this.flashTimer / 20, 0.8);
+        }
+
+        // Glow pour les coups spéciaux
+        if (this.attack && this.attack.type === 'special') {
+            const def = this.attack.def;
+            if (def.element) {
+                const elementColors = {
+                    fire: '#ff6600',
+                    ice: '#00ccff',
+                    lightning: '#ffcc00',
+                    dark: '#9900ff',
+                    holy: '#ffffaa'
+                };
+                options.glowColor = elementColors[def.element] || '#ff6600';
+                options.glowIntensity = 0.5 + Math.sin(performance.now() / 100) * 0.2;
+            }
+        }
+
+        // Aura pour le contre actif
+        if (this.counterActive) {
+            options.glowColor = '#66ff88';
+            options.glowIntensity = 0.4 + Math.sin(performance.now() / 80) * 0.3;
+        }
+
+        // Invincibilité : scintillement doré
+        if (this.invincible > 0) {
+            options.glowColor = '#ffd700';
+            options.glowIntensity = 0.3 + Math.sin(performance.now() / 60) * 0.4;
+        }
+
+        // Gel : teinte bleutée
+        if (this.frozen > 0) {
+            options.colorTint = '#aee6ff';
+            options.opacity = 0.85;
+        }
+
+        // Garde : lueur bleue
+        if (this.state === 'guard' && this.blockstun > 0) {
+            options.glowColor = '#4ac0ff';
+            options.glowIntensity = this.blockstun / GUARD_STUN * 0.5;
+        }
+
+        return options;
+    }
+
+    /** Dessine les effets spéciaux post-rendu */
+    _drawSpecialEffects(ctx) {
+        // Gel : particules de glace
         if (this.frozen > 0) {
             ctx.save();
-            ctx.globalAlpha = 0.4;
+            ctx.globalAlpha = 0.4 + Math.sin(performance.now() / 150) * 0.1;
             ctx.fillStyle = '#aee6ff';
-            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            
+            // Glaçons autour du personnage
+            const iceParticles = [
+                { x: -40, y: -80 }, { x: 40, y: -100 },
+                { x: -30, y: -130 }, { x: 30, y: -70 },
+                { x: -50, y: -50 }, { x: 50, y: -120 }
+            ];
+            
+            for (const p of iceParticles) {
+                const offsetX = Math.sin(performance.now() / 200 + p.x) * 5;
+                ctx.beginPath();
+                ctx.moveTo(this.x + p.x + offsetX, this.y + p.y);
+                ctx.lineTo(this.x + p.x + 5 + offsetX, this.y + p.y - 15);
+                ctx.lineTo(this.x + p.x + 10 + offsetX, this.y + p.y);
+                ctx.fill();
+            }
+            
             ctx.restore();
         }
-        // invincibilité : scintillement doré
+
+        // Invincibilité : particules dorées
         if (this.invincible > 0) {
             ctx.save();
-            ctx.globalAlpha = 0.25 + 0.15 * Math.sin(this.frozen + performance.now() / 60);
+            const alpha = 0.25 + 0.15 * Math.sin(performance.now() / 60);
+            ctx.globalAlpha = alpha;
             ctx.fillStyle = '#ffd700';
-            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            
+            // Étincelles autour du personnage
+            for (let i = 0; i < 6; i++) {
+                const angle = (performance.now() / 500) + (i * Math.PI / 3);
+                const radius = 90 + Math.sin(performance.now() / 100 + i) * 10;
+                const px = this.x + Math.cos(angle) * radius;
+                const py = this.y - 100 + Math.sin(angle * 2) * 30;
+                ctx.beginPath();
+                ctx.arc(px, py, 3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            
             ctx.restore();
         }
-        // contre actif : aura verte
+
+        // Contre actif : aura verte pulsante
         if (this.counterActive) {
             ctx.save();
-            ctx.globalAlpha = 0.3;
+            ctx.globalAlpha = 0.25 + Math.sin(performance.now() / 80) * 0.1;
             ctx.fillStyle = '#66ff88';
-            ctx.fillRect(this.x - 70, this.y - 150, 140, 150);
+            ctx.beginPath();
+            ctx.ellipse(this.x, this.y - 75, 80, 100, 0, 0, Math.PI * 2);
+            ctx.fill();
             ctx.restore();
         }
+
+        // Flash de garde
         if (this.guardFlash > 0) {
             ctx.save();
             ctx.globalAlpha = this.guardFlash / 28;
@@ -622,6 +757,8 @@ export class Fighter {
             ctx.fillRect(this.x - 75, this.y - 160, 150, 160);
             ctx.restore();
         }
+
+        // K.O. : effet de vision rouge
         if (this.state === 'ko') {
             ctx.save();
             ctx.globalAlpha = 0.25;
