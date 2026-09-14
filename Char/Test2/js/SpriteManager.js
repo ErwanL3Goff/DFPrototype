@@ -209,9 +209,12 @@ export class SpriteManager {
         ctx.scale(stretch, squash);
         ctx.translate(-x, -y);
 
-        // Ombre portée dynamique
+        // Ombre portée dynamique (les propriétés d'ombre sont
+        // nettoyées par le ctx.restore() principal de draw() —
+        // PAS de save() ici, il déséquilibrerait la pile d'états
+        // et laisserait la transformation squash & stretch active
+        // sur le canvas, déformant le décor des frames suivantes)
         if (this.animationConfig.shadowColor) {
-            ctx.save();
             ctx.shadowColor = this.animationConfig.shadowColor;
             ctx.shadowBlur = this.animationConfig.shadowBlur * squash;
             // API canvas : shadowOffsetX/Y (pas ctx.shadowOffset.x/y)

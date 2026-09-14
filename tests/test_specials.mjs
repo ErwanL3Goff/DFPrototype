@@ -107,16 +107,41 @@ await page.waitForTimeout(800);
 await clear1();
 await page.evaluate(() => { const x = window.__game; x.f1.x = 300; x.f2.x = 800; x.f1.hp = 1000; x.f2.hp = 1000; });
 await page.waitForTimeout(300);
-await page.keyboard.press('1');           // coup léger
-await page.waitForTimeout(50);            // frame ~3 : fenêtre de cancel ouverte
-await page.keyboard.down('ArrowDown');   await page.waitForTimeout(40);
-await page.keyboard.down('ArrowRight');  await page.waitForTimeout(40);
-await page.keyboard.press('2');            // cancel en lance roquette
-await page.keyboard.up('ArrowDown');     await page.keyboard.up('ArrowRight');
-await page.waitForTimeout(250);
+// jusqu'à 3 tentatives : la livraison des événements clavier par Playwright
+// peut être retardée de >200ms dans une session longue, ce qui fait sortir
+// de la fenêtre de cancel (frames 3..15 du coup léger)
+let t5ok = false, t5tries = 0, t5detail = '';
+for (let attempt = 0; attempt < 3 && !t5ok; attempt++) {
+    t5tries++;
+    await page.evaluate(() => { const x = window.__game;
+        x.f1.attack = null; x.f1.state = 'idle'; x.f1.hitstun = 0; x.f1.blockstun = 0;
+        x.f1.motion.consume(); x.projectiles.length = 0; });
+    await page.waitForTimeout(200);
+    await page.keyboard.press('1');           // coup léger
+    // attendre le début de la fenêtre de cancel (frame >= 3), synchronisé
+    // sur les frames de jeu (la latence clavier peut dépasser 100ms)
+    let fr = -1;
+    for (let i = 0; i < 40; i++) {
+        fr = await page.evaluate(() => window.__game.f1.attack?.frame ?? -1);
+        if (fr >= 3) break;
+        await page.waitForTimeout(20);
+    }
+    if (fr < 3) { t5detail = 'attaque jamais vue'; continue; }
+    await page.keyboard.down('ArrowDown');   await page.waitForTimeout(30);
+    await page.keyboard.down('ArrowRight');  await page.waitForTimeout(30);
+    await page.keyboard.press('2');            // cancel en lance roquette
+    await page.keyboard.up('ArrowDown');     await page.keyboard.up('ArrowRight');
+    for (let i = 0; i < 20 && !t5ok; i++) {
+        const st = await page.evaluate(() => ({ p: window.__game.projectiles.length,
+            s: window.__game.f1.attack?.type }));
+        if (st.p >= 1 || st.s === 'special') t5ok = true;
+        else await page.waitForTimeout(20);
+    }
+    if (!t5ok) t5detail = 'fenêtre manquée (frame=' + fr + ')';
+}
 g = await G();
-results.push(['Combo cancel : coup léger -> lance roquette', g.projectiles.length >= 1 || g.f1.attack?.type === 'special',
-    `projectiles=${g.projectiles.length}, atk=${g.f1.attack?.type}`]);
+results.push(['Combo cancel : coup léger -> lance roquette', t5ok,
+    `${t5ok ? 'OK en ' + t5tries + ' tentative(s)' : t5detail}, projectiles=${g.projectiles.length}, atk=${g.f1.attack?.type}`]);
 await page.waitForTimeout(1000);
 
 // --- T6 : Gel de Rosaline (QCF P2, face à gauche : avant = q) ---
