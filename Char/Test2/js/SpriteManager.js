@@ -214,8 +214,9 @@ export class SpriteManager {
             ctx.save();
             ctx.shadowColor = this.animationConfig.shadowColor;
             ctx.shadowBlur = this.animationConfig.shadowBlur * squash;
-            ctx.shadowOffset.x = this.animationConfig.shadowOffset.x * facing;
-            ctx.shadowOffset.y = this.animationConfig.shadowOffset.y;
+            // API canvas : shadowOffsetX/Y (pas ctx.shadowOffset.x/y)
+            ctx.shadowOffsetX = this.animationConfig.shadowOffset.x * facing;
+            ctx.shadowOffsetY = this.animationConfig.shadowOffset.y;
         }
 
         // Effet de motion blur (traînées)
