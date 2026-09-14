@@ -55,6 +55,12 @@ transparent), d'après le modèle GrandeTileset étendu :
   sauvegardés dans `*_tileset_4rows_backup.png` et `*_tileset_16rows_backup.png`.
 - Les coups spéciaux de chaque personnage sont définis dans
   `Char/Test2/js/specialMoves.js` (motions, dégâts, variantes par bouton).
+- **Recadrage (outils/fix_tilesets.py)** : chaque frame est nettoyée puis
+  recadrée automatiquement — cadres décoratifs des planches d'origine
+  supprimés, plus grande figure conservée, personnage recentré et pieds
+  calés en bas de la frame, échelle uniforme par ligne d'animation.
+  Les frames vides (attaques aériennes, spéciaux) sont reconstruites à
+  partir des frames voisines ou de la pose teintée de la ligne 17.
 
 ### Garde (nouvelle mécanique)
 
