@@ -1,24 +1,42 @@
 # 🎨 Sprites Personnages - DF Prototype 2
 
-## Sprites Générés Automatiquement
+## ✨ NOUVEAU : Système de Sprites Animés Amélioré
 
-Des tilesets d'animation ont été générés pour les personnages suivants :
+Le système de sprites a été entièrement repensé pour offrir un style animé fluide et dynamique !
 
-### ✅ Personnages Disponibles
+### 🎬 Fonctionnalités du Nouveau Système
 
-| Personnage | Style | Couleurs Principales | Tileset |
-|------------|-------|---------------------|---------|
-| **Ike** | Héros dynamique | Orange vif, Blanc, Bleu foncé | `Char/Ike/sprites_generated/ike_tileset.png` |
-| **Kafka** | Mystérieux/Sombre | Noir, Gris foncé, Rouge sang | `Char/Kafka/sprites_generated/kafka_tileset.png` |
-| **Suzuki** | Samouraï | Rouge kimono, Noir hakama, Doré | `Char/Suzuki/sprites_generated/suzuki_tileset.png` |
-| **Jane** | Combattante | Rouge bordeaux, Bleu nuit, Or | `Char/Jane/sprites_generated/jane_tileset.png` |
-| **Tim** | Aventureur | Blond, Vert forêt, Marron | `Char/Tim/sprites_generated/tim_tileset.png` |
-| **Asuka** | Artiste martial | Blanc gi, Rouge obi, Bleu | `Char/Asuka/sprites_generated/asuka_tileset.png` |
-| **Baki** | Fighter intense | Noir, Gris anthracite, Orange | `Char/Baki/sprites_generated/baki_tileset.png` |
+#### 1. **Squash & Stretch Dynamique**
+- Étirement du personnage pendant les sauts (effet de vitesse)
+- Compression à l'atterrissage pour un impact visuel
+- Respiration légère en idle pour donner vie au personnage
+
+#### 2. **Effets de Glow et Auras**
+- Aura pulsante pour les coups spéciaux (feu, glace, foudre, etc.)
+- Scintillement doré pendant l'invincibilité
+- Lueur verte pour le contre actif
+- Flash blanc quand le personnage est touché
+
+#### 3. **Motion Blur**
+- Traînées de mouvement pendant les déplacements rapides
+- Intensité proportionnelle à la vitesse
+
+#### 4. **Interpolation entre Frames**
+- Transition fluide entre les animations
+- Méthode `drawInterpolated()` pour fondre deux frames
+
+#### 5. **Ombres Portées Dynamiques**
+- Ombre qui s'adapte à la hauteur du saut
+- Direction ajustée selon l'orientation du personnage
+
+#### 6. **Particules et Effets Spéciaux**
+- Glaçons animés autour des personnages gelés
+- Étincelles dorées pour l'invincibilité
+- Aura pulsante pour les contres
 
 ---
 
-## 📐 Structure des Tilesets (format 16 lignes)
+## 📐 Structure des Tilesets (20 lignes x 8 frames)
 
 Chaque tileset contient **20 lignes x 8 frames** de 50px (400x1000, fond
 transparent), d'après le modèle GrandeTileset étendu :
@@ -92,97 +110,156 @@ Maintenir la direction opposée à l'adversaire bloque les coups :
 - Cheveux dressés ou mouvements dramatiques
 - Pose puissante caractéristique
 
+
 ---
 
-## 🛠️ Comment Utiliser dans le Jeu
+## 🛠️ Comment Utiliser le Nouveau Système
 
-### Dans `game.js` ou `char.js` :
+### Dans `Fighter.js` ou vos propres classes :
 
 ```javascript
-// Charger le tileset du personnage
-const charTileset = {
-    'Ike': 'Char/Ike/sprites_generated/ike_tileset.png',
-    'Kafka': 'Char/Kafka/sprites_generated/kafka_tileset.png',
-    'Suzuki': 'Char/Suzuki/sprites_generated/suzuki_tileset.png',
-    // ... autres personnages
-};
+// Utilisation basique (compatible ancien système)
+this.sprites.draw(ctx, row, frame, x, y, facing, scale);
 
-// Configuration d'animation
-const animationConfig = {
-    frameWidth: 50,
-    frameHeight: 50,
-    framesPerRow: 8,
-    states: ['idle', 'walk', 'attack', 'special']
-};
+// Utilisation avancée avec effets de style animé
+this.sprites.draw(ctx, row, frame, x, y, facing, scale, {
+    squash: 1.1,              // Compression verticale (1 = normal)
+    stretch: 0.9,             // Étirement horizontal (1 = normal)
+    rotation: Math.PI / 8,    // Rotation en radians
+    glowColor: '#ff6600',     // Couleur de l'aura (feu)
+    glowIntensity: 0.7,       // Intensité du glow (0-1)
+    flashColor: '#ffffff',    // Couleur de flash
+    flashIntensity: 0.5,      // Intensité du flash (0-1)
+    opacity: 1.0,             // Opacité globale
+    motionBlur: 0.3,          // Traînée de mouvement (0-1)
+    colorTint: '#aee6ff',     // Teinte de couleur (gel)
+    additiveBlend: false      // Mode de fusion additif
+});
 
-// Pour dessiner une frame spécifique
-function drawSprite(ctx, tilesetImg, state, frameIndex, x, y) {
-    const row = animationConfig.states.indexOf(state);
-    const sx = frameIndex * animationConfig.frameWidth;
-    const sy = row * animationConfig.frameHeight;
-    
-    ctx.drawImage(
-        tilesetImg,
-        sx, sy, animationConfig.frameWidth, animationConfig.frameHeight,
-        x, y, animationConfig.frameWidth, animationConfig.frameHeight
-    );
+// Interpolation fluide entre deux frames
+this.sprites.drawInterpolated(ctx, row, frame1, frame2, t, x, y, facing, scale, {
+    opacity: 0.8
+});
+// t = 0 → frame1, t = 1 → frame2
+```
+
+### Exemple dans la classe Fighter :
+
+```javascript
+_getAnimatedStyleOptions() {
+    const options = {
+        squash: 1.0,
+        stretch: 1.0,
+        glowColor: null,
+        motionBlur: 0
+    };
+
+    // Squash & stretch basé sur la vitesse
+    if (!this.grounded) {
+        const speed = Math.abs(this.vy);
+        options.stretch = 1 + Math.min(speed * 0.02, 0.15);
+        options.squash = 1 - Math.min(speed * 0.015, 0.1);
+    }
+
+    // Motion blur pendant les déplacements rapides
+    if (Math.abs(this.vx) > MOVE_SPEED * 0.8) {
+        options.motionBlur = Math.abs(this.vx) / MOVE_SPEED * 0.4;
+    }
+
+    // Glow pour les coups spéciaux
+    if (this.attack && this.attack.type === 'special') {
+        options.glowColor = '#ff6600';
+        options.glowIntensity = 0.5 + Math.sin(performance.now() / 100) * 0.2;
+    }
+
+    return options;
+}
+
+draw(ctx) {
+    const animOptions = this._getAnimatedStyleOptions();
+    this.sprites.draw(ctx, this.animRow, this.animFrame, 
+                      this.x, this.y, this.facing, SPRITE_SCALE, animOptions);
 }
 ```
 
 ---
 
-## 🎨 Personnalisation
+## 🎨 Configuration des Effets
 
-Les sprites sont générés avec des couleurs basées sur le style de chaque personnage. Vous pouvez :
+### Couleurs d'éléments pour les coups spéciaux :
 
-1. **Modifier les couleurs** dans le script de génération
-2. **Ajouter de nouveaux personnages** en suivant le même modèle
-3. **Ajuster les dimensions** si nécessaire (actuellement 50×50px)
+```javascript
+const elementColors = {
+    fire: '#ff6600',      // Feu - orange rougeoyant
+    ice: '#00ccff',       // Glace - bleu glacier
+    lightning: '#ffcc00', // Foudre - jaune électrique
+    dark: '#9900ff',      // Obscur - violet sombre
+    holy: '#ffffaa'       // Sacré - blanc doré
+};
+```
 
-### Exemple pour ajouter un nouveau personnage :
+### Paramètres de la classe SpriteManager :
 
-```python
-characters['NouveauPerso'] = {
-    'skin': (255, 200, 180),    # Couleur de peau
-    'hair': (100, 50, 30),      # Couleur cheveux
-    'shirt': (60, 90, 150),     # Couleur haut
-    'pants': (40, 40, 60),      # Couleur bas
-    'accent': (255, 100, 100),  # Couleur accent/spécial
-    'name': 'NouveauPerso'
-}
+```javascript
+spriteManager.setAnimationConfig({
+    shadowColor: 'rgba(0, 0, 0, 0.4)',
+    shadowBlur: 8,
+    shadowOffset: { x: 0, y: 5 },
+    outlineColor: 'rgba(0, 0, 0, 0.3)',
+    outlineWidth: 2,
+    glowBlur: 15,
+    brightness: 1.0,
+    contrast: 1.0,
+    saturation: 1.1
+});
 ```
 
 ---
 
-## 📁 Arborescence
+## ⚡ Optimisations
 
-```
-/workspace/Char/
-├── Ike/
-│   └── sprites_generated/
-│       ├── ike_tileset.png
-│       ├── ike_idle.png
-│       ├── ike_walk.png
-│       ├── ike_attack.png
-│       └── ike_special.png
-├── Kafka/
-│   └── sprites_generated/
-│       └── ...
-├── Suzuki/
-│   └── sprites_generated/
-│       └── ...
-└── ... (autres personnages)
+### Cache de Frames
+
+Le système met automatiquement en cache les frames pré-rendues pour optimiser les performances :
+
+```javascript
+// Activer/désactiver le cache
+spriteManager.setCacheEnabled(true);
+
+// Vider le cache manuellement
+spriteManager.clearCache();
+
+// Le cache se vide automatiquement quand il dépasse 500 entrées
 ```
 
 ---
 
-## ⚡ Notes Techniques
+## 📁 Fichiers Modifiés
 
-- Les sprites sont générés procéduralement avec Pillow (PIL)
-- Style minimaliste mais distinctif pour chaque personnage
-- Compatible avec les systèmes d'animation par tileset classiques
-- Fond blanc pour faciliter l'intégration (peut être rendu transparent si besoin)
+| Fichier | Description |
+|---------|-------------|
+| `Char/Test2/js/SpriteManager.js` | Nouveau système de rendu avec effets animés |
+| `Char/Test2/js/Fighter.js` | Intégration des effets dans la classe Fighter |
 
 ---
 
-**Généré automatiquement pour DF Prototype 2** 🎮
+## 🎮 Effets par Défaut dans Fighter.js
+
+La classe `Fighter` intègre automatiquement les effets suivants :
+
+| État | Effet | Description |
+|------|-------|-------------|
+| **Idle** | Respiration | Oscillation lente du squash/stretch |
+| **Saut** | Stretch vertical | Étirement proportionnel à la vitesse |
+| **Course rapide** | Motion blur | Traînées de mouvement |
+| **Coup spécial** | Glow élémentaire | Aura pulsante colorée |
+| **Invincibilité** | Étincelles dorées | Particules circulaires |
+| **Contre actif** | Aura verte | Ellipse pulsante |
+| **Gel** | Glaçons + teinte bleue | Particules triangulaires |
+| **Garde** | Flash bleu | Lueur proportionnelle au blockstun |
+| **Hit** | Flash blanc | Clignotement bref |
+| **K.O.** | Teinte rouge | Overlay semi-transparent |
+
+---
+
+**Mis à jour pour DF Prototype 2 - Système de sprites animés amélioré** 🎮✨
