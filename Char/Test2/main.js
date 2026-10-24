@@ -74,6 +74,26 @@ async function boot() {
 
     game.start();
     window.__game = game; // exposé pour debug et tests automatisés
+
+    // touches hôte (inspirées du portage SSF2T HD Remix) :
+    // F2 compteur de frames, F3 debug + hitboxes, F7 succès (pause le jeu)
+    window.addEventListener('keydown', e => {
+        if (e.code === 'F2') { game.showFps = !game.showFps; e.preventDefault(); }
+        else if (e.code === 'F3') { game.debugMode = !game.debugMode; e.preventDefault(); }
+        else if (e.code === 'F7') {
+            e.preventDefault();
+            if (game.achievements.overlayVisible) {
+                game.achievements.hideOverlay();
+                game.paused = false;
+            } else {
+                game.achievements.showOverlay();
+                game.paused = true;
+            }
+        } else if (e.code === 'Escape' && game.achievements.overlayVisible) {
+            game.achievements.hideOverlay();
+            game.paused = false;
+        }
+    });
 }
 
 boot().catch(err => {

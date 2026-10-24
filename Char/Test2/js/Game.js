@@ -10,6 +10,7 @@ import { MotionInput } from './MotionInput.js';
 import { Projectile } from './Projectile.js';
 import { Stage } from './Stage.js';
 import { HUD } from './HUD.js';
+import { Achievements } from './Achievements.js';
 
 export class Game {
     constructor(canvas, ui, charData1, charData2, input) {
@@ -45,6 +46,14 @@ export class Game {
         this.slowmo = 0;
         this.shake = 0;
         this.queuedAnnouncements = [];
+
+        // succès hors-ligne + touches hôte (F2/F3/F7)
+        this.achievements = new Achievements();
+        window.__achievements = this.achievements;   // hooks Fighter (succès)
+        this.paused = false;      // F7 : pause pendant l'overlay succès
+        this.showFps = false;    // F2 : compteur de frames
+        this.debugMode = false;  // F3 : infos debug + hitboxes
+        this._fps = 0; this._fpsAcc = 0; this._fpsLast = performance.now();
 
         this._startIntro();
         this._bindUi();
@@ -131,6 +140,14 @@ export class Game {
     }
 
     update() {
+        // compteur de FPS (F2)
+        this._fpsAcc++;
+        const now = performance.now();
+        if (now - this._fpsLast >= 500) {
+            this._fps = Math.round(this._fpsAcc * 1000 / (now - this._fpsLast));
+            this._fpsAcc = 0; this._fpsLast = now;
+        }
+        if (this.paused) { this.input.endFrame(); return; }
         this.tick++;
         this.stage.update();
         this._renderAnnouncement();
@@ -249,11 +266,14 @@ export class Game {
                     hitstun: 30, ignoreGuard: true, launcher: true
                 });
                 atk.vx = 0;
+                this.achievements.track('throw');
+                if (a.def.input === 'Q360') this.achievements.track('throw360');
                 this.shake = 9; this.slowmo = 8;
                 continue;
             }
 
             a.hasHit = true;
+            if (a.type === 'special') this.achievements.track('special_hit');
             if (a.def.multi || a.def.type === 'multiHit') {
                 a.hitsDone = (a.hitsDone || 0) + 1;
                 a.lastHitFrame = a.frame;
@@ -308,6 +328,7 @@ export class Game {
     }
 
     _onKO(winner, timeout = false) {
+        if (winner) this.achievements.track('ko', { timeout, winnerHp: winner.hp });
         this.state = 'KO';
         this.stateTimer = 0;
         this.slowmo = 30;
@@ -332,6 +353,7 @@ export class Game {
                 this.ui.announceEl.classList.remove('visible');
                 this.ui.overlayEl.classList.add('visible');
                 this.ui.resultEl.textContent = `${w.name.toUpperCase()} GAGNE LE MATCH !`;
+                this.achievements.track('match', { winnerId: w.id });
             } else if (this._koWinner) {
                 this.round++;
                 this._resetRound();
@@ -355,6 +377,50 @@ export class Game {
         this.f2.draw(ctx);
         for (const pr of this.projectiles) pr.draw(ctx);
         this.hud.render(ctx, this.f1, this.f2, this.timeLeft);
+        if (this.showFps) this._renderFps(ctx);
+        if (this.debugMode) this._renderDebug(ctx);
+        ctx.restore();
+    }
+
+    _renderFps(ctx) {
+        ctx.save();
+        ctx.font = '13px monospace';
+        ctx.fillStyle = '#8f8';
+        ctx.textAlign = 'right';
+        ctx.fillText(`${this._fps} FPS — tick ${this.tick}`, GAME_WIDTH - 12, 20);
+        ctx.restore();
+    }
+
+    _renderDebug(ctx) {
+        ctx.save();
+        ctx.font = '12px monospace';
+        ctx.fillStyle = 'rgba(0,0,0,.45)';
+        ctx.fillRect(10, 28, 240, 118);
+        ctx.fillStyle = '#8cf';
+        ctx.textAlign = 'left';
+        let y = 44;
+        for (const f of [this.f1, this.f2]) {
+            const a = f.attack;
+            const atk = a ? `${a.type} ${a.def?.name || ''} f${a.frame}/${a.def?.frames || '?'}` : '-';
+            ctx.fillText(`${f.id} ${f.name}: ${f.state} x=${Math.round(f.x)} pv=${f.hp}`, 18, y);
+            ctx.fillText(`  atk: ${atk}`, 18, y + 14);
+            y += 32;
+        }
+        // hitbox (rouge) / corps (bleu)
+        for (const f of [this.f1, this.f2]) {
+            const b = f.getBodyBox();
+            ctx.strokeStyle = 'rgba(80,140,255,.9)';
+            ctx.strokeRect(b.x, b.yTop, b.width, b.yBottom - b.yTop);
+            const hb = f.getHitbox();
+            if (hb) {
+                ctx.strokeStyle = 'rgba(255,60,60,.9)';
+                ctx.strokeRect(hb.x, hb.yTop, hb.width, hb.yBottom - hb.yTop);
+            }
+        }
+        for (const p of this.projectiles) {
+            ctx.strokeStyle = 'rgba(255,200,60,.9)';
+            ctx.strokeRect(p.left, p.top, p.right - p.left, p.bottom - p.top);
+        }
         ctx.restore();
     }
 }

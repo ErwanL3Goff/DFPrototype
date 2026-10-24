@@ -85,6 +85,7 @@ export class Fighter {
     /** Tente de déclencher un spécial via la motion en cours. */
     trySpecial(level) {
         this._jumpPending = 0;   // un coup annule le saut différé
+        this._cancelEligible = !!(this.attack && this.attack.type === 'normal');
         if (this.busy) {
             // combo cancel : pendant les frames actives d'un coup normal
             if (this.attack && this.attack.type !== 'special' && this.attack.type !== 'throw') {
@@ -96,6 +97,7 @@ export class Fighter {
         if (!this.grounded) return;
         const m = matchSpecial(this.slug, this.motion, level);
         if (!m) return;
+        if (this._cancelEligible) window.__achievements?.track('cancel');
         const { def, level: lvl } = m;
         const variant = def.variants ? def.variants[lvl] : null;
 
@@ -203,7 +205,7 @@ export class Fighter {
                       ignoreGuard = false, launcher = false, freeze = false,
                       blockstun = GUARD_STUN, chip = GUARD_CHIP } = {}) {
         // gel : le prochain coup brise la glace
-        if (this.frozen > 0) this.frozen = 0;
+        if (this.frozen > 0) { this.frozen = 0; window.__achievements?.track('ice_break'); }
 
         // invincibilité (uppercuts invincibles)
         if (this.invincible > 0) return 'invincible';
@@ -211,6 +213,7 @@ export class Fighter {
         // contre actif : absorbe le coup et riposte
         if (this.counterActive && this.counterActive.frames > 0) {
             this.counterActive = null;
+            window.__achievements?.track('counter');
             const cd = this.attack?.def;
             const dmg = (cd && cd.counterDamage) || 60;
             this.state = 'attack';
@@ -393,6 +396,7 @@ export class Fighter {
                     else if (c.isDownAction(this.id, 'right')) this.vx = AIR_DRIFT;
                     // double saut : relancer la touche haut en plein vol
                     if (c.justPressedAction(this.id, 'up') && this.jumpsUsed < MAX_JUMPS) {
+                        window.__achievements?.track('double_jump');
                         this.vy = DOUBLE_JUMP_VELOCITY;
                         this.jumpsUsed++;
                         this.state = 'jump';
